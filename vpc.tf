@@ -20,7 +20,7 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_vpc_dhcp_options" "this" {
-  count                = var.enable_dhcp_options ? 1 : 0
+  count = var.enable_dhcp_options ? 1 : 0
 
   domain_name          = var.dhcp_options_domain_name
   domain_name_servers  = var.dhcp_options_domain_name_servers
@@ -38,15 +38,13 @@ resource "aws_vpc_dhcp_options" "this" {
 }
 
 resource "aws_vpc_dhcp_options_association" "this" {
-  count           = var.enable_dhcp_options ? 1 : 0
+  count = var.enable_dhcp_options ? 1 : 0
 
   vpc_id          = aws_vpc.this.id
-  dhcp_options_id = aws_vpc_dhcp_options.this.id
+  dhcp_options_id = aws_vpc_dhcp_options.this[0].id
 }
 
 resource "aws_default_security_group" "this" {
-  count  = var.enable_dhcp_options ? 1 : 0
-
   vpc_id = aws_vpc.this.id
 
   tags = merge(
