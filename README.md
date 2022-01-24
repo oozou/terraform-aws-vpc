@@ -1,3 +1,30 @@
+# AWS VPC Terraform Module
+
+Terraform module with create vpc and subnet resources on AWS.
+
+## Usage
+
+```terraform
+module "vpc" {
+  source = "git@git@github.com:oozou/terraform-aws-vpc.git?ref=v1.0.0"
+
+  environment = "dev"
+  name = "customer-corp"
+  cidr = "10.0.0.0/16"
+
+  high_availability_mode = true
+
+  azs = ["ap-southeas-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  private_subnets = ["10.0.101.0/23" ,"10.0.103.0/23", "10.0.105.0/23"]
+  database_subnets = ["10.0.201.0/23", "10.0.203.0/23", "10.0.205.0/23"]
+
+  tags = {
+    "Custom-Tag" = "1"
+  }
+}
+```
+
 ## Requirements
 
 | Name | Version |
