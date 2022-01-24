@@ -1,4 +1,6 @@
-# VPC Options Set
+# ############################################################################
+# VPC
+# ############################################################################
 resource "aws_vpc" "this" {
   cidr_block                       = var.cidr
   instance_tenancy                 = var.instance_tenancy
@@ -17,8 +19,9 @@ resource "aws_vpc" "this" {
   )
 }
 
-# DHCP Options Set
 resource "aws_vpc_dhcp_options" "this" {
+  count                = var.enable_dhcp_options ? 1 : 0
+
   domain_name          = var.dhcp_options_domain_name
   domain_name_servers  = var.dhcp_options_domain_name_servers
   ntp_servers          = var.dhcp_options_ntp_servers
@@ -35,12 +38,15 @@ resource "aws_vpc_dhcp_options" "this" {
 }
 
 resource "aws_vpc_dhcp_options_association" "this" {
+  count           = var.enable_dhcp_options ? 1 : 0
+
   vpc_id          = aws_vpc.this.id
   dhcp_options_id = aws_vpc_dhcp_options.this.id
 }
 
-# Security Groups
 resource "aws_default_security_group" "this" {
+  count  = var.enable_dhcp_options ? 1 : 0
+
   vpc_id = aws_vpc.this.id
 
   tags = merge(
