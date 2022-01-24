@@ -1,4 +1,6 @@
+# ############################################################################
 # IAM Role for VPC Flow Log
+# ############################################################################
 data "aws_iam_policy_document" "vpc_flow_log_role" {
   statement {
     sid     = "AssumeRolePolicy"
@@ -25,7 +27,6 @@ resource "aws_iam_role" "vpc_flow_log" {
   )
 }
 
-# IAM Policy for Cloudwatch
 data "aws_iam_policy_document" "vpc_flow_log" {
   statement {
     sid       = "AllowReadAllLogGroups"
@@ -60,7 +61,9 @@ resource "aws_iam_role_policy" "vpc_flow_log" {
   policy = data.aws_iam_policy_document.vpc_flow_log.json
 }
 
+# ############################################################################
 # VPC Flow Log
+# ############################################################################
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
   name              = "${var.environment}-${var.name}-vpc-flowlog"
   retention_in_days = var.flow_log_retention_in_days

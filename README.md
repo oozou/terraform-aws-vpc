@@ -103,4 +103,25 @@ No modules.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_database_subnets_arns"></a> [database\_subnets\_arns](#output\_database\_subnets\_arns) | List of ARNs of database subnets |
+| <a name="output_database_subnets_cidr_blocks"></a> [database\_subnets\_cidr\_blocks](#output\_database\_subnets\_cidr\_blocks) | List of cidr\_blocks of database subnets |
+| <a name="output_database_subnets_ids"></a> [database\_subnets\_ids](#output\_database\_subnets\_ids) | List of IDs of database subnets |
+| <a name="output_database_subnets_ipv6_cidr_blocks"></a> [database\_subnets\_ipv6\_cidr\_blocks](#output\_database\_subnets\_ipv6\_cidr\_blocks) | List of IPv6 cidr\_blocks of database subnets in an IPv6 enabled VPC |
+| <a name="output_default_security_gruop_id"></a> [default\_security\_gruop\_id](#output\_default\_security\_gruop\_id) | The ID of the security group created by default on VPC creation |
+| <a name="output_igw_arn"></a> [igw\_arn](#output\_igw\_arn) | The ARN of the Internet Gateway |
+| <a name="output_igw_id"></a> [igw\_id](#output\_igw\_id) | The ARN of the Internet Gateway |
+| <a name="output_natgw_ids"></a> [natgw\_ids](#output\_natgw\_ids) | List of NAT Gateway IDs |
+| <a name="output_netgw_arns"></a> [netgw\_arns](#output\_netgw\_arns) | The ARN of the Internet Gateway |
+| <a name="output_private_subnets_arns"></a> [private\_subnets\_arns](#output\_private\_subnets\_arns) | List of ARNs of private subnets |
+| <a name="output_private_subnets_cidrs_blocks"></a> [private\_subnets\_cidrs\_blocks](#output\_private\_subnets\_cidrs\_blocks) | List if cidr\_blocks of private subnets |
+| <a name="output_private_subnets_ids"></a> [private\_subnets\_ids](#output\_private\_subnets\_ids) | List of IDs of private subnets |
+| <a name="output_private_subnets_ipv6_cidr_blocks"></a> [private\_subnets\_ipv6\_cidr\_blocks](#output\_private\_subnets\_ipv6\_cidr\_blocks) | List of IPv6 cidr\_blocks of private subnets in an IPv6 enabled VPC |
+| <a name="output_public_subnets_arns"></a> [public\_subnets\_arns](#output\_public\_subnets\_arns) | List of ARNs of public subnets |
+| <a name="output_public_subnets_cidrs_blocks"></a> [public\_subnets\_cidrs\_blocks](#output\_public\_subnets\_cidrs\_blocks) | List if cidr\_blocks of public subnets |
+| <a name="output_public_subnets_ids"></a> [public\_subnets\_ids](#output\_public\_subnets\_ids) | List of IDs of public subnets |
+| <a name="output_public_subnets_ipv6_cidr_blocks"></a> [public\_subnets\_ipv6\_cidr\_blocks](#output\_public\_subnets\_ipv6\_cidr\_blocks) | List of IPv6 cidr\_blocks of public subnets in an IPv6 enabled VPC |
+| <a name="output_vpc_arn"></a> [vpc\_arn](#output\_vpc\_arn) | The ARN of the VPC |
+| <a name="output_vpc_cidr_block"></a> [vpc\_cidr\_block](#output\_vpc\_cidr\_block) | The CIDR block of the VPC |
+| <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The ID of the VPC |
