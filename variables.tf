@@ -1,8 +1,3 @@
-variable "aws_account" {
-  description = "AWS account credentials to access AWS"
-  type        = map(string)
-}
-
 variable "name" {
   description = "Name to be used on all resource as indentifier"
   type        = string
