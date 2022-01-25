@@ -69,6 +69,18 @@ resource "aws_route" "private_nat_gateway" {
   }
 }
 
+resource "aws_route" "private_nat_gateway_ipv6" {
+  count = var.enable_ipv6 ? local.nat_gateway_no : 0
+
+  route_table_id              = element(aws_route_table.private[*].id, count.index)
+  destination_ipv6_cidr_block = "::/0"
+  nat_gateway_id              = element(aws_nat_gateway.nat[*].id, count.index)
+
+  timeouts {
+    create = "5m"
+  }
+}
+
 resource "aws_route_table_association" "private" {
   count = local.nat_gateway_no
 
@@ -100,6 +112,18 @@ resource "aws_route" "database_nat_gateway" {
   route_table_id         = element(aws_route_table.database[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = element(aws_nat_gateway.nat[*].id, count.index)
+
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "database_nat_gateway_ipv6" {
+  count = var.enable_ipv6 ? local.nat_gateway_no : 0
+
+  route_table_id              = element(aws_route_table.database[*].id, count.index)
+  destination_ipv6_cidr_block = "::/0"
+  nat_gateway_id              = element(aws_nat_gateway.nat[*].id, count.index)
 
   timeouts {
     create = "5m"
