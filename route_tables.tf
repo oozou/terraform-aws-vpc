@@ -33,7 +33,7 @@ resource "aws_route" "public_internet_gateway_ipv6" {
 }
 
 resource "aws_route_table_association" "public" {
-  count = length(var.public_subnets) > 0 && length(var.public_subnets) <= 3 ? local.nat_gateway_no : 0
+  count = length(var.public_subnets) > 0 && length(var.public_subnets) <= 3 ? length(var.public_subnets) : 0
 
   subnet_id      = element(aws_subnet.public[*].id, count.index)
   route_table_id = aws_route_table.public[0].id
@@ -43,7 +43,7 @@ resource "aws_route_table_association" "public" {
 # Private Route
 # ############################################################################
 resource "aws_route_table" "private" {
-  count = local.nat_gateway_no
+  count = length(var.private_subnets) > 0 && length(var.private_subnets) <= 3 ? local.nat_gateway_no : 0
 
   vpc_id = aws_vpc.this.id
 
@@ -58,7 +58,7 @@ resource "aws_route_table" "private" {
 }
 
 resource "aws_route" "private_nat_gateway" {
-  count = local.nat_gateway_no
+  count = length(var.private_subnets) > 0 && length(var.private_subnets) <= 3 ? local.nat_gateway_no : 0
 
   route_table_id         = element(aws_route_table.private[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
@@ -70,7 +70,7 @@ resource "aws_route" "private_nat_gateway" {
 }
 
 resource "aws_route" "private_nat_gateway_ipv6" {
-  count = var.enable_ipv6 ? local.nat_gateway_no : 0
+  count = var.enable_ipv6 && length(var.private_subnets) > 0 && length(var.private_subnets) <= 3 ? local.nat_gateway_no : 0
 
   route_table_id              = element(aws_route_table.private[*].id, count.index)
   destination_ipv6_cidr_block = "::/0"
@@ -82,7 +82,7 @@ resource "aws_route" "private_nat_gateway_ipv6" {
 }
 
 resource "aws_route_table_association" "private" {
-  count = local.nat_gateway_no
+  count = length(var.private_subnets) > 0 && length(var.private_subnets) <= 3 ? local.nat_gateway_no : 0
 
   subnet_id      = element(aws_subnet.private[*].id, count.index)
   route_table_id = element(aws_route_table.private[*].id, count.index)
@@ -92,7 +92,7 @@ resource "aws_route_table_association" "private" {
 # Database Route
 # ############################################################################
 resource "aws_route_table" "database" {
-  count = local.nat_gateway_no
+  count = length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? local.nat_gateway_no : 0
 
   vpc_id = aws_vpc.this.id
 
@@ -107,7 +107,7 @@ resource "aws_route_table" "database" {
 }
 
 resource "aws_route" "database_nat_gateway" {
-  count = local.nat_gateway_no
+  count = length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? local.nat_gateway_no : 0
 
   route_table_id         = element(aws_route_table.database[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
@@ -119,7 +119,7 @@ resource "aws_route" "database_nat_gateway" {
 }
 
 resource "aws_route" "database_nat_gateway_ipv6" {
-  count = var.enable_ipv6 ? local.nat_gateway_no : 0
+  count = var.enable_ipv6 && length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? local.nat_gateway_no : 0
 
   route_table_id              = element(aws_route_table.database[*].id, count.index)
   destination_ipv6_cidr_block = "::/0"
@@ -131,7 +131,7 @@ resource "aws_route" "database_nat_gateway_ipv6" {
 }
 
 resource "aws_route_table_association" "database" {
-  count = local.nat_gateway_no
+  count = length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? length(var.database_subnets) : 0
 
   subnet_id      = element(aws_subnet.database[*].id, count.index)
   route_table_id = element(aws_route_table.database[*].id, count.index)
