@@ -42,9 +42,9 @@ output "natgw_ids" {
   value       = aws_nat_gateway.nat[*].id
 }
 
-output "netgw_arns" {
+output "natgw_arns" {
   description = "The ARN of the Internet Gateway"
-  value       = aws_nat_gateway.nat[*].arns
+  value       = aws_nat_gateway.nat[*].arn
 }
 
 # ############################################################################
