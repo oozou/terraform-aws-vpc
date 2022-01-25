@@ -2,7 +2,7 @@
 # Public Subnets
 # ############################################################################
 resource "aws_subnet" "public" {
-  count = length(var.public_subnets) > 0 && length(var.public_subnets) <= 3 ? length(local.nat_gateway_no) : 0
+  count = length(var.public_subnets) > 0 && length(var.public_subnets) <= 3 ? local.nat_gateway_no : 0
 
   vpc_id     = aws_vpc.this.id
   cidr_block = var.public_subnets[count.index]
