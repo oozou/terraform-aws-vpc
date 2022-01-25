@@ -7,7 +7,7 @@ resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.this.id
   cidr_block = var.public_subnets[count.index]
 
-  // If create single public subnet, AWS will take care of availability zones
+  # If create single public subnet, AWS will take care of availability zones
   availability_zone = local.nat_gateway_no > 1 ? var.azs[count.index] : null
 
   tags = merge(
