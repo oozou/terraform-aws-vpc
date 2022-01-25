@@ -82,7 +82,7 @@ resource "aws_route" "private_nat_gateway_ipv6" {
 }
 
 resource "aws_route_table_association" "private" {
-  count = length(var.private_subnets) > 0 && length(var.private_subnets) <= 3 ? local.nat_gateway_no : 0
+  count = length(var.private_subnets) > 0 && length(var.private_subnets) <= 3 ? length(var.private_subnets) : 0
 
   subnet_id      = element(aws_subnet.private[*].id, count.index)
   route_table_id = element(aws_route_table.private[*].id, count.index)
