@@ -28,4 +28,6 @@ resource "aws_nat_gateway" "nat" {
     },
     var.tags
   )
+
+  depends_on = [aws_internet_gateway.this[0]]
 }
