@@ -42,11 +42,6 @@ output "natgw_ids" {
   value       = aws_nat_gateway.nat[*].id
 }
 
-output "natgw_arns" {
-  description = "The ARN of the Internet Gateway"
-  value       = aws_nat_gateway.nat[*].arn
-}
-
 # ############################################################################
 # Public Subnets
 # ############################################################################
