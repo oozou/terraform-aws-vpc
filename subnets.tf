@@ -12,7 +12,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-public${count.index}",
+      "Name"        = "${var.environment}-${var.name}-public-${count.index}",
       "Environment" = var.environment
     },
     var.tags
@@ -31,7 +31,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-private${count.index}",
+      "Name"        = "${var.environment}-${var.name}-private-${count.index}",
       "Environment" = var.environment
     },
     var.tags
@@ -50,7 +50,7 @@ resource "aws_subnet" "database" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-database${count.index}",
+      "Name"        = "${var.environment}-${var.name}-database-${count.index}",
       "Environment" = var.environment
     },
     var.tags

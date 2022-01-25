@@ -8,7 +8,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     {
-      "Name"        = format("${var.environment}-${var.name}-public%s", count.index),
+      "Name"        = "${var.environment}-${var.name}-public",
       "Environment" = var.environment,
       "Terraform"   = "true"
     },
@@ -49,7 +49,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     {
-      "Name"        = format("${var.environment}-${var.name}-private%s", count.index),
+      "Name"        = local.nat_gateway_no > 1 ? format("${var.environment}-${var.name}-private-%s", count.index) : "${var.environment}-${var.name}-private",
       "Environment" = var.environment,
       "Terraform"   = "true"
     },
@@ -86,7 +86,7 @@ resource "aws_route_table" "database" {
 
   tags = merge(
     {
-      "Name"        = format("${var.environment}-${var.name}-database%s", count.index),
+      "Name"        = local.nat_gateway_no > 1 ? format("${var.environment}-${var.name}-database-%s", count.index) : "${var.environment}-${var.name}-database",
       "Environment" = var.environment,
       "Terraform"   = "true"
     },
@@ -94,11 +94,10 @@ resource "aws_route_table" "database" {
   )
 }
 
-
 resource "aws_route" "database_nat_gateway" {
   count = local.nat_gateway_no
 
-  route_table_id         = element(aws_route_table.private[*].id, count.index)
+  route_table_id         = element(aws_route_table.database[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = element(aws_nat_gateway.nat[*].id, count.index)
 
