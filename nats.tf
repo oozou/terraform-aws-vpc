@@ -8,7 +8,7 @@ resource "aws_eip" "nat" {
 
   tags = merge(
     {
-      "Name"        = format("${var.environment}-${var.name}-nat%s", count.index),
+      "Name"        = format("${var.name}-${var.environment}-nat-%s", count.index),
       "Environment" = var.environment
     },
     var.tags
@@ -23,7 +23,7 @@ resource "aws_nat_gateway" "nat" {
 
   tags = merge(
     {
-      "Name"        = format("${var.environment}-${var.name}-nat%s", count.index),
+      "Name"        = format("${var.name}-${var.environment}-nat-%s", count.index),
       "Environment" = var.environment
     },
     var.tags

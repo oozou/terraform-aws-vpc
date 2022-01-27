@@ -15,12 +15,12 @@ data "aws_iam_policy_document" "vpc_flow_log_role" {
 }
 
 resource "aws_iam_role" "vpc_flow_log" {
-  name               = "${var.environment}-${var.name}-vpc-flowlog"
+  name               = "${var.name}-${var.environment}-vpc-flowlog"
   assume_role_policy = data.aws_iam_policy_document.vpc_flow_log_role.json
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-vpc-flowlog",
+      "Name"        = "${var.name}-${var.environment}-vpc-flowlog",
       "Environment" = var.environment
     },
     var.tags
@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "vpc_flow_log" {
 }
 
 resource "aws_iam_role_policy" "vpc_flow_log" {
-  name   = "${var.environment}-${var.name}-vpc-flowlog"
+  name   = "${var.name}-${var.environment}-vpc-flowlog"
   role   = aws_iam_role.vpc_flow_log.id
   policy = data.aws_iam_policy_document.vpc_flow_log.json
 }
@@ -65,12 +65,12 @@ resource "aws_iam_role_policy" "vpc_flow_log" {
 # VPC Flow Log
 # ############################################################################
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
-  name              = "${var.environment}-${var.name}-vpc-flowlog"
+  name              = "${var.name}-${var.environment}-vpc-flowlog"
   retention_in_days = var.flow_log_retention_in_days
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-vpc-flowlog"
+      "Name"        = "${var.name}-${var.environment}-vpc-flowlog"
       "Environment" = var.environment
     },
     var.tags
@@ -85,7 +85,7 @@ resource "aws_flow_log" "vpc_flow_log" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-vpc-flowlog",
+      "Name"        = "${var.name}-${var.environment}-vpc-flowlog",
       "Environment" = var.environment
     },
     var.tags

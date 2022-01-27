@@ -12,7 +12,7 @@ resource "aws_vpc" "this" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-vpc",
+      "Name"        = "${var.name}-${var.environment}-vpc",
       "Environment" = var.environment
     },
     var.tags
@@ -30,7 +30,7 @@ resource "aws_vpc_dhcp_options" "this" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-dhcp-options",
+      "Name"        = "${var.name}-${var.environment}-dhcp-options",
       "Environment" = var.environment
     },
     var.tags
@@ -49,7 +49,7 @@ resource "aws_default_security_group" "this" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-default-sg",
+      "Name"        = "${var.name}-${var.environment}-default-sg",
       "Environment" = var.environment
     },
     var.tags

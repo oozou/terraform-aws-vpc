@@ -8,7 +8,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     {
-      "Name"        = "${var.environment}-${var.name}-public",
+      "Name"        = "${var.name}-${var.environment}-public",
       "Environment" = var.environment,
       "Terraform"   = "true"
     },
@@ -49,7 +49,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     {
-      "Name"        = local.nat_gateway_no > 1 ? format("${var.environment}-${var.name}-private-%s", count.index) : "${var.environment}-${var.name}-private",
+      "Name"        = local.nat_gateway_no > 1 ? format("${var.name}-${var.environment}-private-%s", count.index) : "${var.name}-${var.environment}-private",
       "Environment" = var.environment,
       "Terraform"   = "true"
     },
@@ -98,7 +98,7 @@ resource "aws_route_table" "database" {
 
   tags = merge(
     {
-      "Name"        = local.nat_gateway_no > 1 ? format("${var.environment}-${var.name}-database-%s", count.index) : "${var.environment}-${var.name}-database",
+      "Name"        = local.nat_gateway_no > 1 ? format("${var.name}-${var.environment}-database-%s", count.index) : "${var.name}-${var.environment}-database",
       "Environment" = var.environment,
       "Terraform"   = "true"
     },

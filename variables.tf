@@ -1,7 +1,6 @@
 variable "name" {
   description = "Name to be used on all resource as indentifier"
   type        = string
-  default     = ""
 }
 
 variable "cidr" {
