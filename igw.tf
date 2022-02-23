@@ -8,10 +8,9 @@ resource "aws_internet_gateway" "this" {
 
   tags = merge(
     {
-      "Name"        = "${var.name}-${var.environment}-internet-gateway",
-      "Environment" = var.environment,
-      "Terraform"   = "true"
+      "Name" = "${var.name}-${var.environment}-internet-gateway"
     },
-    var.tags
+    var.tags,
+    local.default_tags
   )
 }

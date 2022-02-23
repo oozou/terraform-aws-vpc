@@ -6,7 +6,7 @@ Terraform module with create vpc and subnet resources on AWS.
 
 ```terraform
 module "vpc" {
-  source = "git@git@github.com:oozou/terraform-aws-vpc.git?ref=v1.0.0"
+  source = "git::ssh://git@github.com:oozou/terraform-aws-vpc.git"
 
   environment = "dev"
   name = "customer-corp"
@@ -14,7 +14,7 @@ module "vpc" {
 
   high_availability_mode = true
 
-  azs = ["ap-southeas-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  azs = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
   public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   private_subnets = ["10.0.101.0/23" ,"10.0.103.0/23", "10.0.105.0/23"]
   database_subnets = ["10.0.201.0/23", "10.0.203.0/23", "10.0.205.0/23"]
@@ -36,7 +36,7 @@ module "vpc" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.72.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.63 |
 
 ## Modules
 
@@ -55,7 +55,9 @@ No modules.
 | [aws_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway) | resource |
 | [aws_nat_gateway.nat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/nat_gateway) | resource |
 | [aws_route.database_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
+| [aws_route.database_nat_gateway_ipv6](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.private_nat_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
+| [aws_route.private_nat_gateway_ipv6](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.public_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route.public_internet_gateway_ipv6](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route) | resource |
 | [aws_route_table.database](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
@@ -77,7 +79,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_aws_account"></a> [aws\_account](#input\_aws\_account) | AWS account credentials to access AWS | `map(string)` | n/a | yes |
 | <a name="input_azs"></a> [azs](#input\_azs) | A list of availability zones names or ids in the region | `list(string)` | <pre>[<br>  "ap-southeast-1a",<br>  "ap-southeast-1b",<br>  "ap-southeast-1c"<br>]</pre> | no |
 | <a name="input_cidr"></a> [cidr](#input\_cidr) | The CIDR block for the VPC | `string` | n/a | yes |
 | <a name="input_database_subnets"></a> [database\_subnets](#input\_database\_subnets) | The CIDR block for the database subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
@@ -96,7 +97,7 @@ No modules.
 | <a name="input_flow_log_retention_in_days"></a> [flow\_log\_retention\_in\_days](#input\_flow\_log\_retention\_in\_days) | Specifies the number of days you want to retain log events in the specified log group for VPC flow logs. | `number` | `90` | no |
 | <a name="input_high_availability_mode"></a> [high\_availability\_mode](#input\_high\_availability\_mode) | Enable multiple Nat gateway and public subnets with Multi-AZ | `bool` | `true` | no |
 | <a name="input_instance_tenancy"></a> [instance\_tenancy](#input\_instance\_tenancy) | A tenancy option for instances launched into the VPC | `string` | `"default"` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name to be used on all resource as indentifier | `string` | `""` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name to be used on all resource as indentifier | `string` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The CIDR block for the private subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | The CIDR block for the public subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tag for a resource taht create by this component | `map(string)` | `{}` | no |
@@ -113,7 +114,6 @@ No modules.
 | <a name="output_igw_arn"></a> [igw\_arn](#output\_igw\_arn) | The ARN of the Internet Gateway |
 | <a name="output_igw_id"></a> [igw\_id](#output\_igw\_id) | The ARN of the Internet Gateway |
 | <a name="output_natgw_ids"></a> [natgw\_ids](#output\_natgw\_ids) | List of NAT Gateway IDs |
-| <a name="output_netgw_arns"></a> [netgw\_arns](#output\_netgw\_arns) | The ARN of the Internet Gateway |
 | <a name="output_private_subnets_arns"></a> [private\_subnets\_arns](#output\_private\_subnets\_arns) | List of ARNs of private subnets |
 | <a name="output_private_subnets_cidrs_blocks"></a> [private\_subnets\_cidrs\_blocks](#output\_private\_subnets\_cidrs\_blocks) | List if cidr\_blocks of private subnets |
 | <a name="output_private_subnets_ids"></a> [private\_subnets\_ids](#output\_private\_subnets\_ids) | List of IDs of private subnets |

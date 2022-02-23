@@ -8,10 +8,10 @@ resource "aws_eip" "nat" {
 
   tags = merge(
     {
-      "Name"        = format("${var.name}-${var.environment}-nat-%s", count.index),
-      "Environment" = var.environment
+      "Name" = format("${var.name}-${var.environment}-nat-%s", count.index),
     },
-    var.tags
+    var.tags,
+    local.default_tags
   )
 }
 
@@ -23,10 +23,10 @@ resource "aws_nat_gateway" "nat" {
 
   tags = merge(
     {
-      "Name"        = format("${var.name}-${var.environment}-nat-%s", count.index),
-      "Environment" = var.environment
+      "Name" = format("${var.name}-${var.environment}-nat-%s", count.index)
     },
-    var.tags
+    var.tags,
+    local.default_tags
   )
 
   depends_on = [aws_internet_gateway.this[0]]
