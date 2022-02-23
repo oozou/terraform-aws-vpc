@@ -20,10 +20,10 @@ resource "aws_iam_role" "vpc_flow_log" {
 
   tags = merge(
     {
-      "Name"        = "${var.name}-${var.environment}-vpc-flowlog",
-      "Environment" = var.environment
+      "Name" = "${var.name}-${var.environment}-vpc-flowlog"
     },
-    var.tags
+    var.tags,
+    local.default_tags
   )
 }
 
@@ -70,10 +70,10 @@ resource "aws_cloudwatch_log_group" "vpc_flow_log" {
 
   tags = merge(
     {
-      "Name"        = "${var.name}-${var.environment}-vpc-flowlog"
-      "Environment" = var.environment
+      "Name" = "${var.name}-${var.environment}-vpc-flowlog"
     },
-    var.tags
+    var.tags,
+    local.default_tags
   )
 }
 
@@ -85,9 +85,9 @@ resource "aws_flow_log" "vpc_flow_log" {
 
   tags = merge(
     {
-      "Name"        = "${var.name}-${var.environment}-vpc-flowlog",
-      "Environment" = var.environment
+      "Name" = "${var.name}-${var.environment}-vpc-flowlog"
     },
-    var.tags
+    var.tags,
+    local.default_tags
   )
 }
