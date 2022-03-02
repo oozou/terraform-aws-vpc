@@ -6,37 +6,37 @@ Terraform module with create vpc and subnet resources on AWS.
 
 ```terraform
 module "vpc" {
-  source = "git::ssh://git@github.com:oozou/terraform-aws-vpc.git"
+  source = "<source>"
 
-  environment = "dev"
-  name = "customer-corp"
-  cidr = "10.0.0.0/16"
+  customer_prefix = "sbth"
+  environment     = "devops"
 
-  high_availability_mode = true
+  cidr              = "10.0.0.0/16"
+  public_subnets    = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  private_subnets   = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  database_subnets  = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
+  availability_zone = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
 
-  azs = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
-  public_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  private_subnets = ["10.0.101.0/23" ,"10.0.103.0/23", "10.0.105.0/23"]
-  database_subnets = ["10.0.201.0/23", "10.0.203.0/23", "10.0.205.0/23"]
+  is_create_nat_gateway        = true  # default false
+  is_enable_single_nat_gateway = false # default false
+  is_create_vpc_flow_logs      = true  # defautl false
 
-  tags = {
-    "Custom-Tag" = "1"
-  }
+  tags = { "Workspace" = "pc-labtop-tokbongki" }
 }
 ```
-
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.63 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.00 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 3.63 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.00 |
 
 ## Modules
 
@@ -79,9 +79,10 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_azs"></a> [azs](#input\_azs) | A list of availability zones names or ids in the region | `list(string)` | <pre>[<br>  "ap-southeast-1a",<br>  "ap-southeast-1b",<br>  "ap-southeast-1c"<br>]</pre> | no |
+| <a name="input_availability_zone"></a> [availability\_zone](#input\_availability\_zone) | A list of availability zones names or ids in the region | `list(string)` | n/a | yes |
 | <a name="input_cidr"></a> [cidr](#input\_cidr) | The CIDR block for the VPC | `string` | n/a | yes |
-| <a name="input_database_subnets"></a> [database\_subnets](#input\_database\_subnets) | The CIDR block for the database subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
+| <a name="input_customer_prefix"></a> [customer\_prefix](#input\_customer\_prefix) | The prefix name of customer to be displayed in AWS console and resource | `string` | n/a | yes |
+| <a name="input_database_subnets"></a> [database\_subnets](#input\_database\_subnets) | The CIDR block for the database subnets. Required 3 subnets for availability zones | `list(string)` | `[]` | no |
 | <a name="input_dhcp_options_domain_name"></a> [dhcp\_options\_domain\_name](#input\_dhcp\_options\_domain\_name) | Specifies DNS name for DHCP options set (requires enable\_dhcp\_options set to true) | `string` | `""` | no |
 | <a name="input_dhcp_options_domain_name_servers"></a> [dhcp\_options\_domain\_name\_servers](#input\_dhcp\_options\_domain\_name\_servers) | Specify a list of DNS server addresses for DHCP options set, default to AWS provided (requires enable\_dhcp\_options set to true) | `list(string)` | <pre>[<br>  "AmazonProvidedDNS"<br>]</pre> | no |
 | <a name="input_dhcp_options_netbios_name_servers"></a> [dhcp\_options\_netbios\_name\_servers](#input\_dhcp\_options\_netbios\_name\_servers) | Specify a list of netbios servers for DHCP options set (requires enable\_dhcp\_options set to true) | `list(string)` | `[]` | no |
@@ -93,14 +94,19 @@ No modules.
 | <a name="input_enable_dns_hostnames"></a> [enable\_dns\_hostnames](#input\_enable\_dns\_hostnames) | Should be true to enable DNS hostnames in the VPC | `bool` | `false` | no |
 | <a name="input_enable_dns_support"></a> [enable\_dns\_support](#input\_enable\_dns\_support) | Should be true to enable DNS support in the VPC | `bool` | `true` | no |
 | <a name="input_enable_ipv6"></a> [enable\_ipv6](#input\_enable\_ipv6) | Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block. | `bool` | `false` | no |
-| <a name="input_environment"></a> [environment](#input\_environment) | To manage a resources with tags | `string` | n/a | yes |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment Variable used as a prefix | `string` | n/a | yes |
 | <a name="input_flow_log_retention_in_days"></a> [flow\_log\_retention\_in\_days](#input\_flow\_log\_retention\_in\_days) | Specifies the number of days you want to retain log events in the specified log group for VPC flow logs. | `number` | `90` | no |
-| <a name="input_high_availability_mode"></a> [high\_availability\_mode](#input\_high\_availability\_mode) | Enable multiple Nat gateway and public subnets with Multi-AZ | `bool` | `true` | no |
 | <a name="input_instance_tenancy"></a> [instance\_tenancy](#input\_instance\_tenancy) | A tenancy option for instances launched into the VPC | `string` | `"default"` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name to be used on all resource as indentifier | `string` | n/a | yes |
+| <a name="input_is_create_database_subnet_route_table"></a> [is\_create\_database\_subnet\_route\_table](#input\_is\_create\_database\_subnet\_route\_table) | Whether to create database subnet or not | `bool` | `false` | no |
+| <a name="input_is_create_internet_gateway"></a> [is\_create\_internet\_gateway](#input\_is\_create\_internet\_gateway) | Whether to create igw or not | `bool` | `true` | no |
+| <a name="input_is_create_nat_gateway"></a> [is\_create\_nat\_gateway](#input\_is\_create\_nat\_gateway) | Whether to create nat gatewat or not | `bool` | `false` | no |
+| <a name="input_is_create_vpc"></a> [is\_create\_vpc](#input\_is\_create\_vpc) | Whether to create vpc or not | `bool` | `true` | no |
+| <a name="input_is_create_vpc_flow_logs"></a> [is\_create\_vpc\_flow\_logs](#input\_is\_create\_vpc\_flow\_logs) | Whether to create vpc flow logs or not | `bool` | `false` | no |
+| <a name="input_is_enable_single_nat_gateway"></a> [is\_enable\_single\_nat\_gateway](#input\_is\_enable\_single\_nat\_gateway) | Should be true if you want to provision a single shared NAT Gateway across all of your private networks | `bool` | `false` | no |
+| <a name="input_is_one_nat_gateway_per_az"></a> [is\_one\_nat\_gateway\_per\_az](#input\_is\_one\_nat\_gateway\_per\_az) | Enable multiple Nat gateway and public subnets with Multi-AZ | `bool` | `false` | no |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The CIDR block for the private subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | The CIDR block for the public subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | Tag for a resource taht create by this component | `map(string)` | `{}` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Tags to add more; default tags contian {terraform=true, environment=var.environment} | `map(string)` | `{}` | no |
 
 ## Outputs
 
@@ -125,3 +131,4 @@ No modules.
 | <a name="output_vpc_arn"></a> [vpc\_arn](#output\_vpc\_arn) | The ARN of the VPC |
 | <a name="output_vpc_cidr_block"></a> [vpc\_cidr\_block](#output\_vpc\_cidr\_block) | The CIDR block of the VPC |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | The ID of the VPC |
+<!-- END_TF_DOCS -->
