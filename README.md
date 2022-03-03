@@ -8,8 +8,8 @@ Terraform module with create vpc and subnet resources on AWS.
 module "vpc" {
   source = "<source>"
 
-  customer_prefix = "sbth"
-  environment     = "devops"
+  prefix      = "sbth"
+  environment = "devops"
 
   cidr              = "10.0.0.0/16"
   public_subnets    = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
@@ -81,7 +81,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_availability_zone"></a> [availability\_zone](#input\_availability\_zone) | A list of availability zones names or ids in the region | `list(string)` | n/a | yes |
 | <a name="input_cidr"></a> [cidr](#input\_cidr) | The CIDR block for the VPC | `string` | n/a | yes |
-| <a name="input_customer_prefix"></a> [customer\_prefix](#input\_customer\_prefix) | The prefix name of customer to be displayed in AWS console and resource | `string` | n/a | yes |
 | <a name="input_database_subnets"></a> [database\_subnets](#input\_database\_subnets) | The CIDR block for the database subnets. Required 3 subnets for availability zones | `list(string)` | `[]` | no |
 | <a name="input_dhcp_options_domain_name"></a> [dhcp\_options\_domain\_name](#input\_dhcp\_options\_domain\_name) | Specifies DNS name for DHCP options set (requires enable\_dhcp\_options set to true) | `string` | `""` | no |
 | <a name="input_dhcp_options_domain_name_servers"></a> [dhcp\_options\_domain\_name\_servers](#input\_dhcp\_options\_domain\_name\_servers) | Specify a list of DNS server addresses for DHCP options set, default to AWS provided (requires enable\_dhcp\_options set to true) | `list(string)` | <pre>[<br>  "AmazonProvidedDNS"<br>]</pre> | no |
@@ -104,6 +103,7 @@ No modules.
 | <a name="input_is_create_vpc_flow_logs"></a> [is\_create\_vpc\_flow\_logs](#input\_is\_create\_vpc\_flow\_logs) | Whether to create vpc flow logs or not | `bool` | `false` | no |
 | <a name="input_is_enable_single_nat_gateway"></a> [is\_enable\_single\_nat\_gateway](#input\_is\_enable\_single\_nat\_gateway) | Should be true if you want to provision a single shared NAT Gateway across all of your private networks | `bool` | `false` | no |
 | <a name="input_is_one_nat_gateway_per_az"></a> [is\_one\_nat\_gateway\_per\_az](#input\_is\_one\_nat\_gateway\_per\_az) | Enable multiple Nat gateway and public subnets with Multi-AZ | `bool` | `false` | no |
+| <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix name of customer to be displayed in AWS console and resource | `string` | n/a | yes |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets) | The CIDR block for the private subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets) | The CIDR block for the public subnets. Required 3 subnets for availability zones | `list(string)` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags to add more; default tags contian {terraform=true, environment=var.environment} | `map(string)` | `{}` | no |
