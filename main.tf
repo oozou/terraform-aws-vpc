@@ -2,7 +2,7 @@
 /*                                  Generics                                  */
 /* -------------------------------------------------------------------------- */
 locals {
-  name        = format("%s-%s", var.customer_prefix, var.environment)
+  name        = format("%s-%s", var.prefix, var.environment)
   environment = var.environment
 
   max_subnet_length = max(
