@@ -1,28 +1,4 @@
 /* -------------------------------------------------------------------------- */
-/*                                  Generics                                  */
-/* -------------------------------------------------------------------------- */
-locals {
-  name        = format("%s-%s", var.prefix, var.environment)
-  environment = var.environment
-
-  max_subnet_length = max(
-    length(var.public_subnets),
-    length(var.private_subnets),
-    length(var.database_subnets)
-  )
-
-  nat_gateway_count = var.is_enable_single_nat_gateway ? 1 : var.is_one_nat_gateway_per_az ? length(var.availability_zone) : local.max_subnet_length
-
-  tags = merge(
-    {
-      "Environment" = local.environment,
-      "Terraform"   = "true"
-    },
-    var.tags
-  )
-}
-
-/* -------------------------------------------------------------------------- */
 /*                                     VPC                                    */
 /* -------------------------------------------------------------------------- */
 resource "aws_vpc" "this" {
@@ -38,7 +14,7 @@ resource "aws_vpc" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "vpc") }
+    { "Name" = local.vpc_name }
   )
 }
 
@@ -53,7 +29,7 @@ resource "aws_vpc_dhcp_options" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "dhcp-options") }
+    { "Name" = local.vpc_dhcp_options }
   )
 }
 
@@ -71,7 +47,7 @@ resource "aws_default_security_group" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "default-sg") }
+    { "Name" = local.vpc_default_sg }
   )
 }
 
@@ -173,7 +149,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "public") }
+    { "Name" = local.public_route }
   )
 }
 
@@ -210,7 +186,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-%s-%s", local.name, "private", count.index) : format("%s-%s", local.name, "private") }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s", local.name, count.index) : format("%s-private", local.name) }
   )
 }
 
@@ -250,21 +226,17 @@ resource "aws_route_table_association" "private" {
 /* ------------------------------- route table ------------------------------ */
 resource "aws_route_table" "database" {
   count = var.is_create_vpc && var.is_create_database_subnet_route_table && length(var.database_subnets) > 0 && var.is_create_nat_gateway ? var.is_enable_single_nat_gateway ? 1 : length(var.database_subnets) : 0
-  # previous configuration
-  # count = length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? local.nat_gateway_no : 0
 
   vpc_id = aws_vpc.this[0].id
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-%s-%s", local.name, "database", count.index) : format("%s-%s", local.name, "database") }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s", local.name, count.index) : format("%s-database", local.name) }
   )
 }
 
 resource "aws_route" "database_nat_gateway" {
   count = var.is_create_vpc && var.is_create_database_subnet_route_table && length(var.database_subnets) > 0 && var.is_create_nat_gateway ? var.is_enable_single_nat_gateway ? 1 : length(var.database_subnets) : 0
-  # previous configuration
-  # count = length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? local.nat_gateway_no : 0
 
   route_table_id         = element(aws_route_table.database[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
@@ -277,8 +249,6 @@ resource "aws_route" "database_nat_gateway" {
 
 resource "aws_route" "database_nat_gateway_ipv6" {
   count = var.is_create_vpc && var.is_create_database_subnet_route_table && var.enable_ipv6 && length(var.database_subnets) > 0 && var.is_create_nat_gateway ? var.is_enable_single_nat_gateway ? 1 : length(var.database_subnets) : 0
-  # previous configuration
-  # count = var.enable_ipv6 && length(var.database_subnets) > 0 && length(var.database_subnets) <= 3 ? local.nat_gateway_no : 0
 
   route_table_id              = element(aws_route_table.database[*].id, count.index)
   destination_ipv6_cidr_block = "::/0"
@@ -303,12 +273,12 @@ resource "aws_route_table_association" "database" {
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
   count = var.is_create_vpc && var.is_create_vpc_flow_logs ? 1 : 0
 
-  name              = format("%s-%s", local.name, "vpc-flowlog")
+  name              = local.vpc_flow_log_group
   retention_in_days = var.flow_log_retention_in_days
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "vpc-flowlog") }
+    { "Name" = local.vpc_flow_log_group }
   )
 }
 
@@ -322,7 +292,7 @@ resource "aws_flow_log" "vpc_flow_log" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "vpc-flowlog") }
+    { "Name" = local.vpc_flow_log }
   )
 }
 
@@ -345,12 +315,12 @@ data "aws_iam_policy_document" "vpc_flow_log_role" {
 resource "aws_iam_role" "vpc_flow_log" {
   count = var.is_create_vpc && var.is_create_vpc_flow_logs ? 1 : 0
 
-  name               = format("%s-%s", local.name, "vpc-flowlog")
+  name               = local.vpc_flow_log_role
   assume_role_policy = data.aws_iam_policy_document.vpc_flow_log_role[0].json
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "vpc-flowlog") }
+    { "Name" = local.vpc_flow_log_role }
   )
 }
 
