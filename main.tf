@@ -61,7 +61,7 @@ resource "aws_internet_gateway" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s", local.name, "internet-gateway") }
+    { "Name" = format("%s-internet-gateway", local.name) }
   )
 }
 
@@ -80,7 +80,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s-%s", local.name, "public", count.index) }
+    { "Name" = format("%s-public-%s", local.name, count.index) }
   )
 }
 /* ----------------------------- private subnets ---------------------------- */
@@ -93,7 +93,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s-%s", local.name, "private", count.index) }
+    { "Name" = format("%s-private-%s", local.name, count.index) }
   )
 }
 /* ---------------------------- database subnets ---------------------------- */
@@ -106,7 +106,7 @@ resource "aws_subnet" "database" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s-%s", local.name, "database", count.index) }
+    { "Name" = format("%s-database-%s", local.name, count.index) }
   )
 }
 
@@ -120,7 +120,7 @@ resource "aws_eip" "nat" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s-%s", local.name, "eip-nat", count.index) }
+    { "Name" = format("%s-eip-nat-%s", local.name, count.index) }
   )
 }
 
@@ -134,7 +134,7 @@ resource "aws_nat_gateway" "nat" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-%s-%s", local.name, "nat", count.index) }
+    { "Name" = format("%s-nat-%s", local.name, count.index) }
   )
 }
 
@@ -149,7 +149,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.public_route }
+    { "Name" = local.public_route_table }
   )
 }
 

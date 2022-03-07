@@ -17,7 +17,7 @@ locals {
   vpc_name            = format("%s-vpc", local.name)
   vpc_dhcp_options    = format("%s-dhcp-options", local.name)
   vpc_default_sg      = format("%s-default-sg", local.name)
-  public_route        = format("%s-public", local.name)
+  public_route_table  = format("%s-public", local.name)
   vpc_flow_log_group  = format("%s-log-group", local.name)
   vpc_flow_log        = format("%s-vpc-flowlog", local.name)
   vpc_flow_log_role   = format("%s-vpc-flowlog-role", local.name)
