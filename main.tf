@@ -14,7 +14,7 @@ resource "aws_vpc" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.vpc_name }
+    { "Name" = format("%s-vpc", local.name) }
   )
 }
 
@@ -29,7 +29,7 @@ resource "aws_vpc_dhcp_options" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.vpc_dhcp_options }
+    { "Name" = format("%s-dhcp-options", local.name) }
   )
 }
 
@@ -47,7 +47,7 @@ resource "aws_default_security_group" "this" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.vpc_default_sg }
+    { "Name" = format("%s-default-sg", local.name) }
   )
 }
 
@@ -80,7 +80,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-public-%s", local.name, count.index) }
+    { "Name" = length(var.public_subnets) > 1 ? format("%s-public-%s-subnet", local.name, local.availability_zone_shoten[count.index]) : format("%s-public-subnet", local.name) }
   )
 }
 /* ----------------------------- private subnets ---------------------------- */
@@ -93,7 +93,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-private-%s", local.name, count.index) }
+    { "Name" = length(var.private_subnets) > 1 ? format("%s-private-%s-subnet", local.name, local.availability_zone_shoten[count.index]) : format("%s-private-subnet", local.name) }
   )
 }
 /* ---------------------------- database subnets ---------------------------- */
@@ -106,7 +106,7 @@ resource "aws_subnet" "database" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-database-%s", local.name, count.index) }
+    { "Name" = length(var.database_subnets) > 1 ? format("%s-database-%s-subnet", local.name, local.availability_zone_shoten[count.index]) : format("%s-database-subnet", local.name) }
   )
 }
 
@@ -120,7 +120,7 @@ resource "aws_eip" "nat" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-eip-nat-%s", local.name, count.index) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-eip-nat-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-eip-nat", local.name) }
   )
 }
 
@@ -134,7 +134,7 @@ resource "aws_nat_gateway" "nat" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-nat-%s", local.name, count.index) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-nat-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-nat", local.name) }
   )
 }
 
@@ -149,7 +149,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.public_route_table }
+    { "Name" = format("%s-public", local.name) }
   )
 }
 
@@ -186,7 +186,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s", local.name, count.index) : format("%s-private", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-private", local.name) }
   )
 }
 
@@ -231,7 +231,7 @@ resource "aws_route_table" "database" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s", local.name, count.index) : format("%s-database", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-database", local.name) }
   )
 }
 
@@ -273,12 +273,12 @@ resource "aws_route_table_association" "database" {
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
   count = var.is_create_vpc && var.is_create_vpc_flow_logs ? 1 : 0
 
-  name              = local.vpc_flow_log_group
+  name              = format("%s-log-group", local.name)
   retention_in_days = var.flow_log_retention_in_days
 
   tags = merge(
     local.tags,
-    { "Name" = local.vpc_flow_log_group }
+    { "Name" = format("%s-log-group", local.name) }
   )
 }
 
@@ -292,7 +292,7 @@ resource "aws_flow_log" "vpc_flow_log" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.vpc_flow_log }
+    { "Name" = format("%s-vpc-flowlog", local.name) }
   )
 }
 
@@ -315,12 +315,12 @@ data "aws_iam_policy_document" "vpc_flow_log_role" {
 resource "aws_iam_role" "vpc_flow_log" {
   count = var.is_create_vpc && var.is_create_vpc_flow_logs ? 1 : 0
 
-  name               = local.vpc_flow_log_role
+  name               = format("%s-vpc-flowlog-role", local.name)
   assume_role_policy = data.aws_iam_policy_document.vpc_flow_log_role[0].json
 
   tags = merge(
     local.tags,
-    { "Name" = local.vpc_flow_log_role }
+    { "Name" = format("%s-vpc-flowlog-role", local.name) }
   )
 }
 
@@ -357,7 +357,7 @@ data "aws_iam_policy_document" "vpc_flow_log" {
 resource "aws_iam_role_policy" "vpc_flow_log" {
   count = var.is_create_vpc && var.is_create_vpc_flow_logs ? 1 : 0
 
-  name   = local.vpc_flow_log_policy
+  name   = format("%s-vpc-flowlog-policy", local.name)
   role   = aws_iam_role.vpc_flow_log[0].id
   policy = data.aws_iam_policy_document.vpc_flow_log[0].json
 }

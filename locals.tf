@@ -2,8 +2,7 @@
 /*                                  Generics                                  */
 /* -------------------------------------------------------------------------- */
 locals {
-  name        = format("%s-%s", var.prefix, var.environment)
-  environment = var.environment
+  name = format("%s-%s", var.prefix, var.environment)
 
   max_subnet_length = max(
     length(var.public_subnets),
@@ -13,19 +12,11 @@ locals {
 
   nat_gateway_count = var.is_enable_single_nat_gateway ? 1 : var.is_one_nat_gateway_per_az ? length(var.availability_zone) : local.max_subnet_length
 
-  # Naming resouce with non-index
-  vpc_name            = format("%s-vpc", local.name)
-  vpc_dhcp_options    = format("%s-dhcp-options", local.name)
-  vpc_default_sg      = format("%s-default-sg", local.name)
-  public_route_table  = format("%s-public", local.name)
-  vpc_flow_log_group  = format("%s-log-group", local.name)
-  vpc_flow_log        = format("%s-vpc-flowlog", local.name)
-  vpc_flow_log_role   = format("%s-vpc-flowlog-role", local.name)
-  vpc_flow_log_policy = format("%s-vpc-flowlog-policy", local.name)
+  availability_zone_shoten = [for az in var.availability_zone : element(split("-", az), 2)]
 
   tags = merge(
     {
-      "Environment" = local.environment,
+      "Environment" = var.environment,
       "Terraform"   = "true"
     },
     var.tags
