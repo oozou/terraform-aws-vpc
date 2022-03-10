@@ -12,7 +12,7 @@ locals {
 
   nat_gateway_count = var.is_enable_single_nat_gateway ? 1 : var.is_one_nat_gateway_per_az ? length(var.availability_zone) : local.max_subnet_length
 
-  availability_zone_shoten = [for az in var.availability_zone : element(split("-", az), 2)]
+  availability_zone_shorten = [for az in var.availability_zone : element(split("-", az), 2)]
 
   tags = merge(
     {
@@ -27,5 +27,4 @@ locals {
   eks_lb_controller_private_tag = {
     "kubernetes.io/role/internal-elb" = 1
   }
-
 }

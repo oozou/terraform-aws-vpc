@@ -175,6 +175,23 @@ variable "is_create_database_subnet_route_table" {
 /* -------------------------------------------------------------------------- */
 /*                                VPC Flow Log                                */
 /* -------------------------------------------------------------------------- */
+variable "is_create_flow_log" {
+  description = "Whether to create flow log."
+  type        = bool
+  default     = true
+}
+
+variable "is_enable_flow_log_s3_integration" {
+  description = "Whether to enable flow log S3 integration."
+  type        = bool
+  default     = true
+}
+
+variable "flow_log_retention_in_days" {
+  description = "Specifies the number of days you want to retain log events in the specified log group for VPC flow logs."
+  type        = number
+  default     = 90
+}
 
 variable "centralize_flow_log_bucket_name" {
   description = "S3 bucket for store Cloudtrail log (long terms), leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize flow log S3 bucket name (hub)."

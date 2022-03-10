@@ -108,7 +108,7 @@ resource "aws_subnet" "database" {
 
   tags = merge(
     local.tags,
-    { "Name" = length(var.database_subnets) > 1 ? format("%s-database-%s-subnet", local.name, local.availability_zone_shoten[count.index]) : format("%s-database-subnet", local.name) }
+    { "Name" = length(var.database_subnets) > 1 ? format("%s-database-%s-subnet", local.name, local.availability_zone_shorten[count.index]) : format("%s-database-subnet", local.name) }
   )
 }
 
@@ -122,7 +122,7 @@ resource "aws_eip" "nat" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-eip-nat-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-eip-nat", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-eip-nat-%s", local.name, local.availability_zone_shorten[count.index]) : format("%s-eip-nat", local.name) }
   )
 }
 
@@ -136,7 +136,7 @@ resource "aws_nat_gateway" "nat" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-nat-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-nat", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-nat-%s", local.name, local.availability_zone_shorten[count.index]) : format("%s-nat", local.name) }
   )
 }
 
@@ -188,7 +188,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s-rtb", local.name, local.availability_zone_shoten[count.index]) : format("%s-private-rtb", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s-rtb", local.name, local.availability_zone_shorten[count.index]) : format("%s-private-rtb", local.name) }
   )
 }
 
@@ -233,7 +233,7 @@ resource "aws_route_table" "database" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s-rtb", local.name, local.availability_zone_shoten[count.index]) : format("%s-database-rtb", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s-rtb", local.name, local.availability_zone_shorten[count.index]) : format("%s-database-rtb", local.name) }
   )
 }
 

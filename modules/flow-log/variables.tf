@@ -20,8 +20,8 @@ variable "tags" {
 /* -------------------------------------------------------------------------- */
 /*                                 Flow Log                                   */
 /* -------------------------------------------------------------------------- */
-variable "is_enable_flow_log" {
-  description = "Whether to enable flow log."
+variable "is_create_flow_log" {
+  description = "Whether to create flow log."
   type        = bool
   default     = true
 }
