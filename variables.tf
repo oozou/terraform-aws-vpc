@@ -164,25 +164,56 @@ variable "database_subnets" {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  Flow Log                                  */
-/* -------------------------------------------------------------------------- */
-variable "is_create_vpc_flow_logs" {
-  description = "Whether to create vpc flow logs or not"
-  type        = bool
-  default     = false
-}
-
-variable "flow_log_retention_in_days" {
-  description = "Specifies the number of days you want to retain log events in the specified log group for VPC flow logs."
-  type        = number
-  default     = 90
-}
-
-/* -------------------------------------------------------------------------- */
 /*                            Database Route Table                            */
 /* -------------------------------------------------------------------------- */
 variable "is_create_database_subnet_route_table" {
   description = "Whether to create database subnet or not"
   type        = bool
   default     = false
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                VPC Flow Log                                */
+/* -------------------------------------------------------------------------- */
+
+variable "centralize_flow_log_bucket_name" {
+  description = "S3 bucket for store Cloudtrail log (long terms), leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize flow log S3 bucket name (hub)."
+  type        = string
+  default     = ""
+}
+
+variable "centrailize_flow_log_kms_key_id" {
+  description = "The ARN for the KMS encryption key. Leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize kms key arn (hub)."
+  type        = string
+  default     = ""
+}
+
+variable "account_mode" {
+  description = "Account mode for provision cloudtrail, if account_mode is hub, will provision S3, KMS, CloudTrail. if account_mode is spoke, will provision only CloudTrail"
+  type        = string
+  validation {
+    condition     = contains(["hub", "spoke"], var.account_mode)
+    error_message = "Valid values for account_mode are hub and spoke."
+  }
+}
+
+variable "spoke_account_ids" {
+  description = "Spoke account Ids, if mode is hub."
+  type        = list(string)
+  default     = []
+}
+
+variable "centralize_flow_log_bucket_lifecycle_rule" {
+  description = "List of lifecycle rules to transition the data. Leave empty to disable this feature. storage_class can be STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE"
+  type = list(object({
+    id = string
+
+    transition = list(object({
+      days          = number
+      storage_class = string
+    }))
+
+    expiration_days = number
+  }))
+  default = []
 }

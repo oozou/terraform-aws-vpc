@@ -109,3 +109,46 @@ output "database_subnets_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of database subnets in an IPv6 enabled VPC"
   value       = aws_subnet.database[*].ipv6_cidr_block
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                  Flow Logs                                 */
+/* -------------------------------------------------------------------------- */
+output "flow_log_cloudwatch_dest_id" {
+  description = "Flow log CloudWatch Id"
+  value       = join("", module.flow_log.*.flow_log_cloudwatch_dest_id)
+}
+
+output "flow_log_cloudwatch_dest_arn" {
+  description = "Flow log CloudWatch ARN"
+  value       = join("", module.flow_log.*.flow_log_cloudwatch_dest_arn)
+}
+
+output "flow_log_s3_dest_id" {
+  description = "Flow log S3 Id"
+  value       = join("", module.flow_log.*.flow_log_s3_dest_id)
+}
+
+output "flow_log_s3_dest_arn" {
+  description = "Flow log S3 ARN"
+  value       = join("", module.flow_log.*.flow_log_s3_dest_arn)
+}
+
+output "centralize_flow_log_bucket_name" {
+  description = "S3 Centralize Flow log Bucket Name"
+  value       = join("", module.flow_log.*.centralize_flow_log_bucket_name)
+}
+
+output "centralize_flow_log_bucket_arn" {
+  description = "S3 Centralize Flow log Bucket ARN"
+  value       = join("", module.flow_log.*.centralize_flow_log_bucket_arn)
+}
+
+output "centralize_flow_log_key_arn" {
+  description = "KMS Centralize Flow log key arn"
+  value       = join("", module.flow_log.*.centralize_flow_log_key_arn)
+}
+
+output "centralize_flow_log_key_id" {
+  description = "KMS Centralize Flow log key id"
+  value       = join("", module.flow_log.*.centralize_flow_log_key_id)
+}
