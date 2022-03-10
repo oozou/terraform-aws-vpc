@@ -37,4 +37,3 @@ output "centralize_flow_log_key_id" {
   description = "KMS Centralize Flow log key id"
   value       = join("", module.flow_log_kms.*.key_id)
 }
-
