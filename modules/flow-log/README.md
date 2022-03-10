@@ -39,13 +39,16 @@ module "flow_log" {
 
 ## Requirements
 
-No requirements.
+| Name                                                                     | Version  |
+| ------------------------------------------------------------------------ | -------- |
+| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.0.0 |
+| <a name="requirement_aws"></a> [aws](#requirement_aws)                   | >= 4.00  |
 
 ## Providers
 
 | Name                                             | Version |
 | ------------------------------------------------ | ------- |
-| <a name="provider_aws"></a> [aws](#provider_aws) | n/a     |
+| <a name="provider_aws"></a> [aws](#provider_aws) | >= 4.00 |
 
 ## Modules
 
@@ -76,7 +79,7 @@ No requirements.
 | <a name="input_centralize_flow_log_bucket_name"></a> [centralize_flow_log_bucket_name](#input_centralize_flow_log_bucket_name)                               | S3 bucket for store Cloudtrail log (long terms), leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize flow log S3 bucket name (hub).  | `string`                                                                                                                                                                  | `""`    |    no    |
 | <a name="input_environment"></a> [environment](#input_environment)                                                                                           | Environment name used as environment resources name.                                                                                                                             | `string`                                                                                                                                                                  | n/a     |   yes    |
 | <a name="input_flow_log_retention_in_days"></a> [flow_log_retention_in_days](#input_flow_log_retention_in_days)                                              | Specifies the number of days you want to retain log events in the specified log group for VPC flow logs.                                                                         | `number`                                                                                                                                                                  | `90`    |    no    |
-| <a name="input_is_enable_flow_log"></a> [is_enable_flow_log](#input_is_enable_flow_log)                                                                      | Whether to enable flow log.                                                                                                                                                      | `bool`                                                                                                                                                                    | `true`  |    no    |
+| <a name="input_is_create_flow_log"></a> [is_create_flow_log](#input_is_create_flow_log)                                                                      | Whether to create flow log.                                                                                                                                                      | `bool`                                                                                                                                                                    | `true`  |    no    |
 | <a name="input_is_enable_flow_log_s3_integration"></a> [is_enable_flow_log_s3_integration](#input_is_enable_flow_log_s3_integration)                         | Whether to enable flow log S3 integration.                                                                                                                                       | `bool`                                                                                                                                                                    | `true`  |    no    |
 | <a name="input_kms_key_id"></a> [kms_key_id](#input_kms_key_id)                                                                                              | The ARN for the KMS encryption key. Leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize kms key arn (hub).                           | `string`                                                                                                                                                                  | `""`    |    no    |
 | <a name="input_prefix"></a> [prefix](#input_prefix)                                                                                                          | The prefix name of customer to be displayed in AWS console and resource                                                                                                          | `string`                                                                                                                                                                  | n/a     |   yes    |
