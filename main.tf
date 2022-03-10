@@ -149,7 +149,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     local.tags,
-    { "Name" = format("%s-public", local.name) }
+    { "Name" = format("%s-public-rtb", local.name) }
   )
 }
 
@@ -186,7 +186,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-private", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s-rtb", local.name, local.availability_zone_shoten[count.index]) : format("%s-private-rtb", local.name) }
   )
 }
 
@@ -231,7 +231,7 @@ resource "aws_route_table" "database" {
 
   tags = merge(
     local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s", local.name, local.availability_zone_shoten[count.index]) : format("%s-database", local.name) }
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s-rtb", local.name, local.availability_zone_shoten[count.index]) : format("%s-database-rtb", local.name) }
   )
 }
 
