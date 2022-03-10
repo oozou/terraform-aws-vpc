@@ -43,37 +43,37 @@ variable "instance_tenancy" {
   default     = "default"
 }
 
-variable "enable_dns_hostnames" {
+variable "is_enable_dns_hostnames" {
   description = "Should be true to enable DNS hostnames in the VPC"
   type        = bool
   default     = false
 }
 
-variable "enable_dns_support" {
+variable "is_enable_dns_support" {
   description = "Should be true to enable DNS support in the VPC"
   type        = bool
   default     = true
 }
 
-variable "enable_classiclink" {
+variable "is_enable_classiclink" {
   description = "Should be true to enable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic."
   type        = bool
   default     = null
 }
 
-variable "enable_classiclink_dns_support" {
+variable "is_enable_classiclink_dns_support" {
   description = "Should be true to enable ClassicLink DNS Support for the VPC. Only valid in regions and accounts that support EC2 Classic."
   type        = bool
   default     = null
 }
 
-variable "enable_ipv6" {
+variable "is_enable_ipv6" {
   description = "Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block."
   type        = bool
   default     = false
 }
 /* ------------------------------ DHCP options ------------------------------ */
-variable "enable_dhcp_options" {
+variable "is_enable_dhcp_options" {
   description = "Should be true if you want to specify a DHCP options set with a custom domain name, DNS servers, NTP servers, netbios servers, and/or netbios server type"
   type        = bool
   default     = false

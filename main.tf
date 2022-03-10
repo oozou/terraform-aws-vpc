@@ -6,11 +6,11 @@ resource "aws_vpc" "this" {
 
   cidr_block                       = var.cidr
   instance_tenancy                 = var.instance_tenancy
-  enable_dns_hostnames             = var.enable_dns_hostnames
-  enable_dns_support               = var.enable_dns_support
-  enable_classiclink               = var.enable_classiclink
-  enable_classiclink_dns_support   = var.enable_classiclink_dns_support
-  assign_generated_ipv6_cidr_block = var.enable_ipv6
+  enable_dns_hostnames             = var.is_enable_dns_hostnames
+  enable_dns_support               = var.is_enable_dns_support
+  enable_classiclink               = var.is_enable_classiclink
+  enable_classiclink_dns_support   = var.is_enable_classiclink_dns_support
+  assign_generated_ipv6_cidr_block = var.is_enable_ipv6
 
   tags = merge(
     local.tags,
@@ -19,7 +19,7 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_vpc_dhcp_options" "this" {
-  count = var.enable_dhcp_options && var.is_create_vpc ? 1 : 0
+  count = var.is_enable_dhcp_options && var.is_create_vpc ? 1 : 0
 
   domain_name          = var.dhcp_options_domain_name
   domain_name_servers  = var.dhcp_options_domain_name_servers
@@ -34,7 +34,7 @@ resource "aws_vpc_dhcp_options" "this" {
 }
 
 resource "aws_vpc_dhcp_options_association" "this" {
-  count = var.enable_dhcp_options && var.is_create_vpc ? 1 : 0
+  count = var.is_enable_dhcp_options && var.is_create_vpc ? 1 : 0
 
   vpc_id          = aws_vpc.this[0].id
   dhcp_options_id = aws_vpc_dhcp_options.this[0].id
@@ -164,7 +164,7 @@ resource "aws_route" "public_internet_gateway" {
 }
 
 resource "aws_route" "public_internet_gateway_ipv6" {
-  count = var.is_create_vpc && var.is_create_internet_gateway && var.enable_ipv6 && length(var.public_subnets) > 0 ? 1 : 0
+  count = var.is_create_vpc && var.is_create_internet_gateway && var.is_enable_ipv6 && length(var.public_subnets) > 0 ? 1 : 0
 
   route_table_id              = aws_route_table.public[0].id
   destination_ipv6_cidr_block = "::/0"
@@ -205,7 +205,7 @@ resource "aws_route" "private_nat_gateway" {
 }
 
 resource "aws_route" "private_nat_gateway_ipv6" {
-  count = var.is_create_vpc && var.is_create_nat_gateway && var.enable_ipv6 && length(var.private_subnets) > 0 ? local.nat_gateway_count : 0
+  count = var.is_create_vpc && var.is_create_nat_gateway && var.is_enable_ipv6 && length(var.private_subnets) > 0 ? local.nat_gateway_count : 0
 
   route_table_id              = element(aws_route_table.private[*].id, count.index)
   destination_ipv6_cidr_block = "::/0"
@@ -250,7 +250,7 @@ resource "aws_route" "database_nat_gateway" {
 }
 
 resource "aws_route" "database_nat_gateway_ipv6" {
-  count = var.is_create_vpc && var.is_create_database_subnet_route_table && var.enable_ipv6 && length(var.database_subnets) > 0 && var.is_create_nat_gateway ? var.is_enable_single_nat_gateway ? 1 : length(var.database_subnets) : 0
+  count = var.is_create_vpc && var.is_create_database_subnet_route_table && var.is_enable_ipv6 && length(var.database_subnets) > 0 && var.is_create_nat_gateway ? var.is_enable_single_nat_gateway ? 1 : length(var.database_subnets) : 0
 
   route_table_id              = element(aws_route_table.database[*].id, count.index)
   destination_ipv6_cidr_block = "::/0"
