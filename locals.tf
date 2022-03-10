@@ -21,4 +21,11 @@ locals {
     },
     var.tags
   )
+  eks_lb_controller_public_tag = {
+    "kubernetes.io/role/elb" = var.enable_eks_auto_discovery ? 1 : 0
+  }
+  eks_lb_controller_private_tag = {
+    "kubernetes.io/role/internal-elb" = var.enable_eks_auto_discovery ? 1 : 0
+  }
+
 }
