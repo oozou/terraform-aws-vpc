@@ -76,7 +76,7 @@ resource "aws_flow_log" "cloudwatch_dest" {
 /*                             Flow logs (S3 dest)                            */
 /* -------------------------------------------------------------------------- */
 resource "aws_flow_log" "s3_dest" {
-  count                = var.is_create_flow_log && var.is_create_flow_log_s3_integration ? 1 : 0
+  count                = var.is_create_flow_log && var.is_enable_flow_log_s3_integration ? 1 : 0
   log_destination      = local.centralize_flow_log_bucket_arn
   log_destination_type = "s3"
   traffic_type         = "ALL"

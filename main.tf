@@ -81,7 +81,7 @@ resource "aws_subnet" "public" {
   tags = merge(
     local.tags,
     var.enable_eks_auto_discovery ? local.eks_lb_controller_public_tag : {},
-    { "Name" = length(var.public_subnets) > 1 ? format("%s-public-%s-subnet", local.name, local.availability_zone_shoten[count.index]) : format("%s-public-subnet", local.name) }
+    { "Name" = length(var.public_subnets) > 1 ? format("%s-public-%s-subnet", local.name, local.availability_zone_shorten[count.index]) : format("%s-public-subnet", local.name) }
   )
 }
 /* ----------------------------- private subnets ---------------------------- */
@@ -95,7 +95,7 @@ resource "aws_subnet" "private" {
   tags = merge(
     local.tags,
     var.enable_eks_auto_discovery ? local.eks_lb_controller_private_tag : {},
-    { "Name" = length(var.private_subnets) > 1 ? format("%s-private-%s-subnet", local.name, local.availability_zone_shoten[count.index]) : format("%s-private-subnet", local.name) }
+    { "Name" = length(var.private_subnets) > 1 ? format("%s-private-%s-subnet", local.name, local.availability_zone_shorten[count.index]) : format("%s-private-subnet", local.name) }
   )
 }
 /* ---------------------------- database subnets ---------------------------- */

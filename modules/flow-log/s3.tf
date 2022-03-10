@@ -18,7 +18,7 @@ module "centralize_flow_log_bucket" {
 
   additional_bucket_polices = [data.aws_iam_policy_document.s3_flow_log[count.index].json]
 
-  kms_key_arn = { kms_arn = join("", module.flow_log_kms.*.key_arn) }
+  kms_key_arn = { kms_arn = join("", module.flow_log_kms[*].key_arn) }
 
   tags = var.tags
 }
