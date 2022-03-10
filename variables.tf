@@ -17,7 +17,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "enable_eks_auto_discovery" {
+variable "is_enable_eks_auto_discovery" {
   description = "Tags public, private subnet to auto discovery"
   type        = bool
   default     = true
