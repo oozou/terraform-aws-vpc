@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 /* -------------------------------------------------------------------------- */
 resource "aws_cloudwatch_log_group" "flow_log" {
   count             = var.is_create_flow_log ? 1 : 0
-  name              = "/aws/vpc/${local.name}"
+  name              = "/aws/vpc/${local.name}-flow-log"
   retention_in_days = var.flow_log_retention_in_days
 
   tags = merge(local.tags, { Name = "/aws/vpc/${local.name}-flow-log" })

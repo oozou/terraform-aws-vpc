@@ -6,8 +6,7 @@ locals {
 
   account_ids = concat(var.spoke_account_ids, [data.aws_caller_identity.current.account_id])
 
-  centralize_flow_log_bucket_arn = var.centralize_flow_log_bucket_name == "" ? join("", [module.centralize_flow_log_bucket[0].bucket_arn]) : join("", ["arn:aws:s3:::", var.centralize_flow_log_bucket_name])
-
+  centralize_flow_log_bucket_arn = var.centralize_flow_log_bucket_name == "" ? try(module.centralize_flow_log_bucket[0].bucket_arn, "") : join("", ["arn:aws:s3:::", var.centralize_flow_log_bucket_name])
   tags = merge(
     {
       Terraform   = true
