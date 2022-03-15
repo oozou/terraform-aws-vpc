@@ -76,7 +76,7 @@ resource "aws_subnet" "public" {
   cidr_block = var.public_subnets[count.index]
 
   # If create single public subnet, AWS will take care of availability zones
-  availability_zone = local.nat_gateway_count > 1 ? var.availability_zone[count.index] : null
+  availability_zone = var.availability_zone[count.index]
 
   tags = merge(
     local.tags,
@@ -90,7 +90,7 @@ resource "aws_subnet" "private" {
 
   vpc_id            = aws_vpc.this[0].id
   cidr_block        = var.private_subnets[count.index]
-  availability_zone = local.nat_gateway_count > 1 ? var.availability_zone[count.index] : null
+  availability_zone = var.availability_zone[count.index]
 
   tags = merge(
     local.tags,
@@ -104,7 +104,7 @@ resource "aws_subnet" "database" {
 
   vpc_id            = aws_vpc.this[0].id
   cidr_block        = var.database_subnets[count.index]
-  availability_zone = local.nat_gateway_count > 1 ? var.availability_zone[count.index] : null
+  availability_zone = var.availability_zone[count.index]
 
   tags = merge(
     local.tags,
