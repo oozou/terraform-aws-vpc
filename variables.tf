@@ -169,7 +169,7 @@ variable "database_subnets" {
 variable "is_create_database_subnet_route_table" {
   description = "Whether to create database subnet or not"
   type        = bool
-  default     = false
+  default     = true
 }
 
 /* -------------------------------------------------------------------------- */
