@@ -14,7 +14,7 @@ resource "aws_cloudwatch_log_group" "flow_log" {
 
 resource "aws_iam_role" "flow_log" {
   count               = var.is_create_flow_log ? 1 : 0
-  name                = "${local.name}-role"
+  name                = "${local.name}-flow-log-role"
   managed_policy_arns = [aws_iam_policy.flow_log[count.index].arn]
 
   assume_role_policy = jsonencode({
@@ -38,8 +38,8 @@ resource "aws_iam_role" "flow_log" {
 
 resource "aws_iam_policy" "flow_log" {
   count       = var.is_create_flow_log ? 1 : 0
-  name        = "${local.name}-pushlog-policy"
-  description = "${local.name}-pushlog-policy"
+  name        = "${local.name}-flow-log-pushlog-policy"
+  description = "${local.name}-flow-log-pushlog-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
