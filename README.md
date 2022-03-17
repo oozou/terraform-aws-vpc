@@ -22,7 +22,7 @@ module "vpc" {
 
   is_create_nat_gateway        = true  # default false
   is_enable_single_nat_gateway = false # default false
-  is_create_vpc_flow_logs      = true  # defautl false
+  is_create_flow_log           = true  # default false
 
   #VPC Flow logs
   account_mode = "hub"
