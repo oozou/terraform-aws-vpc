@@ -45,44 +45,44 @@ output "natgw_ids" {
 /* -------------------------------------------------------------------------- */
 /*                               Public Subnets                               */
 /* -------------------------------------------------------------------------- */
-output "public_subnets_ids" {
+output "public_subnet_ids" {
   description = "List of IDs of public subnets"
   value       = aws_subnet.public[*].id
 }
 
-output "public_subnets_arns" {
+output "public_subnet_arns" {
   description = "List of ARNs of public subnets"
   value       = aws_subnet.public[*].arn
 }
 
-output "public_subnets_cidrs_blocks" {
+output "public_subnet_cidrs_blocks" {
   description = "List if cidr_blocks of public subnets"
   value       = aws_subnet.public[*].cidr_block
 }
 
-output "public_subnets_ipv6_cidr_blocks" {
+output "public_subnet_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of public subnets in an IPv6 enabled VPC"
   value       = aws_subnet.public[*].ipv6_cidr_block
 }
 /* -------------------------------------------------------------------------- */
 /*                               Private Subnets                              */
 /* -------------------------------------------------------------------------- */
-output "private_subnets_ids" {
+output "private_subnet_ids" {
   description = "List of IDs of private subnets"
   value       = aws_subnet.private[*].id
 }
 
-output "private_subnets_arns" {
+output "private_subnet_arns" {
   description = "List of ARNs of private subnets"
   value       = aws_subnet.private[*].arn
 }
 
-output "private_subnets_cidrs_blocks" {
+output "private_subnet_cidrs_blocks" {
   description = "List if cidr_blocks of private subnets"
   value       = aws_subnet.private[*].cidr_block
 }
 
-output "private_subnets_ipv6_cidr_blocks" {
+output "private_subnet_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of private subnets in an IPv6 enabled VPC"
   value       = aws_subnet.private[*].ipv6_cidr_block
 }
@@ -90,22 +90,22 @@ output "private_subnets_ipv6_cidr_blocks" {
 /* -------------------------------------------------------------------------- */
 /*                              Database Subnets                              */
 /* -------------------------------------------------------------------------- */
-output "database_subnets_ids" {
+output "database_subnet_ids" {
   description = "List of IDs of database subnets"
   value       = aws_subnet.database[*].id
 }
 
-output "database_subnets_arns" {
+output "database_subnet_arns" {
   description = "List of ARNs of database subnets"
   value       = aws_subnet.database[*].arn
 }
 
-output "database_subnets_cidr_blocks" {
+output "database_subnet_cidr_blocks" {
   description = "List of cidr_blocks of database subnets"
   value       = aws_subnet.database[*].cidr_block
 }
 
-output "database_subnets_ipv6_cidr_blocks" {
+output "database_subnet_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of database subnets in an IPv6 enabled VPC"
   value       = aws_subnet.database[*].ipv6_cidr_block
 }
