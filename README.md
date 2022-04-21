@@ -6,31 +6,33 @@ Terraform module with create vpc and subnet resources on AWS.
 
 ## Usage
 
+### Hub account
+
 ```terraform
-module "vpc" {
-  source = "<source>"
+module "hub_vpc" {
+  source = "../"
 
-  prefix      = "sbth"
-  environment = "devops"
-
-  #VPC
-  cidr              = "10.0.0.0/16"
-  public_subnets    = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  private_subnets   = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  database_subnets  = ["10.0.7.0/24", "10.0.8.0/24", "10.0.9.0/24"]
-  availability_zone = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
-
-  is_create_nat_gateway        = true  # default false
-  is_enable_single_nat_gateway = false # default false
-  is_create_flow_log           = true  # default false
-
-  #VPC Flow logs
+  prefix       = "example"
+  environment  = "devops"
   account_mode = "hub"
 
-  # centralize_flow_log_bucket_name = "test-bucket"
-  # centrailize_flow_log_kms_key_id = "arn:aws:kms:ap-southeast-1:557291035693:key/9b55d572-037b-4a95-8bc3-4342a1e952a4"
-  spoke_account_ids = []
+  cidr              = "10.105.0.0/16"
+  public_subnets    = ["10.105.0.0/24", "10.105.1.0/24", "10.105.2.0/24"]
+  private_subnets   = ["10.105.60.0/22", "10.105.64.0/22", "10.105.68.0/22"]
+  database_subnets  = ["10.105.20.0/23", "10.105.22.0/23", "10.105.24.0/23"]
+  availability_zone = ["ap-southeast-1b", "ap-southeast-1c", "ap-southeast-1a"]
 
+  # Nat gateway
+  is_create_nat_gateway        = true  # default false
+  is_enable_single_nat_gateway = true  # default false
+  is_one_nat_gateway_per_az    = false # default false
+
+  # If both DNS attributes are true, instances in the VPC get public DNS hostnames.
+  is_enable_dns_hostnames = false # default false
+  is_enable_dns_support   = true  # default true
+
+  # Flow log confug
+  spoke_account_ids = ["557291035693", "447291035123", "33391035333"]
   centralize_flow_log_bucket_lifecycle_rule = [
     {
       id = "FlowLogLifecyclePolicy"
@@ -48,9 +50,65 @@ module "vpc" {
     }
   ]
 
-  tags = {
-    "Workspace" = "000-test"
-  }
+  tags = { "Workspace" = "pc" }
+}
+
+module "vpc_with_flow_log" {
+  source = "../"
+
+  prefix       = "example"
+  environment  = "dev"
+  account_mode = "spoke"
+
+  cidr              = "10.110.0.0/16"
+  public_subnets    = ["10.110.0.0/24", "10.110.1.0/24", "10.110.2.0/24"]
+  private_subnets   = ["10.110.60.0/22", "10.110.64.0/22", "10.110.68.0/22"]
+  database_subnets  = ["10.110.20.0/23", "10.110.22.0/23", "10.110.24.0/23"]
+  availability_zone = ["ap-southeast-1b", "ap-southeast-1c", "ap-southeast-1a"]
+
+  # Nat gateway
+  is_create_nat_gateway        = true  # default false
+  is_enable_single_nat_gateway = true  # default false
+  is_one_nat_gateway_per_az    = false # default false
+
+  # If both DNS attributes are true, instances in the VPC get public DNS hostnames.
+  is_enable_dns_hostnames = false # default false
+  is_enable_dns_support   = true  # default true
+
+  # Flow log confug
+  centralize_flow_log_bucket_name = module.hub_vpc.centralize_flow_log_bucket_name
+  centrailize_flow_log_kms_key_id = module.hub_vpc.centralize_flow_log_key_id
+
+  tags = { "Workspace" = "pc" }
+}
+
+module "vpc_without_flow_log" {
+  source = "../"
+
+  prefix       = "example"
+  environment  = "test"
+  account_mode = "spoke"
+
+  cidr              = "10.99.0.0/16"
+  public_subnets    = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
+  private_subnets   = ["10.99.60.0/22", "10.99.64.0/22", "10.99.68.0/22"]
+  database_subnets  = ["10.99.20.0/23", "10.99.22.0/23", "10.99.24.0/23"]
+  availability_zone = ["ap-southeast-1b", "ap-southeast-1c", "ap-southeast-1a"]
+
+  # Nat gateway
+  is_create_nat_gateway        = true  # default false
+  is_enable_single_nat_gateway = true  # default false
+  is_one_nat_gateway_per_az    = false # default false
+
+  # If both DNS attributes are true, instances in the VPC get public DNS hostnames.
+  is_enable_dns_hostnames = false # default false
+  is_enable_dns_support   = true  # default true
+
+  # Flow log confug
+  is_create_flow_log                = false
+  is_enable_flow_log_s3_integration = false
+
+  tags = { "Workspace" = "pc" }
 }
 ```
 
@@ -59,26 +117,26 @@ module "vpc" {
 ## Requirements
 
 | Name                                                                     | Version  |
-| ------------------------------------------------------------------------ | -------- |
+|--------------------------------------------------------------------------|----------|
 | <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.0.0 |
 | <a name="requirement_aws"></a> [aws](#requirement_aws)                   | >= 4.00  |
 
 ## Providers
 
 | Name                                             | Version |
-| ------------------------------------------------ | ------- |
+|--------------------------------------------------|---------|
 | <a name="provider_aws"></a> [aws](#provider_aws) | 4.4.0   |
 
 ## Modules
 
 | Name                                                        | Source             | Version |
-| ----------------------------------------------------------- | ------------------ | ------- |
+|-------------------------------------------------------------|--------------------|---------|
 | <a name="module_flow_log"></a> [flow_log](#module_flow_log) | ./modules/flow-log | n/a     |
 
 ## Resources
 
 | Name                                                                                                                                              | Type     |
-| ------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+|---------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | [aws_default_security_group.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group)             | resource |
 | [aws_eip.nat](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip)                                                    | resource |
 | [aws_internet_gateway.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/internet_gateway)                         | resource |
@@ -105,7 +163,7 @@ module "vpc" {
 ## Inputs
 
 | Name                                                                                                                                                         | Description                                                                                                                                                                      | Type                                                                                                                                                                      | Default                                   | Required |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | :------: |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------|:--------:|
 | <a name="input_account_mode"></a> [account_mode](#input_account_mode)                                                                                        | Account mode for provision cloudtrail, if account_mode is hub, will provision S3, KMS, CloudTrail. if account_mode is spoke, will provision only CloudTrail                      | `string`                                                                                                                                                                  | n/a                                       |   yes    |
 | <a name="input_availability_zone"></a> [availability_zone](#input_availability_zone)                                                                         | A list of availability zones names or ids in the region                                                                                                                          | `list(string)`                                                                                                                                                            | n/a                                       |   yes    |
 | <a name="input_centrailize_flow_log_kms_key_id"></a> [centrailize_flow_log_kms_key_id](#input_centrailize_flow_log_kms_key_id)                               | The ARN for the KMS encryption key. Leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize kms key arn (hub).                           | `string`                                                                                                                                                                  | `""`                                      |    no    |
@@ -145,7 +203,7 @@ module "vpc" {
 ## Outputs
 
 | Name                                                                                                                                   | Description                                                         |
-| -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+|----------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
 | <a name="output_centralize_flow_log_bucket_arn"></a> [centralize_flow_log_bucket_arn](#output_centralize_flow_log_bucket_arn)          | S3 Centralize Flow log Bucket ARN                                   |
 | <a name="output_centralize_flow_log_bucket_name"></a> [centralize_flow_log_bucket_name](#output_centralize_flow_log_bucket_name)       | S3 Centralize Flow log Bucket Name                                  |
 | <a name="output_centralize_flow_log_key_arn"></a> [centralize_flow_log_key_arn](#output_centralize_flow_log_key_arn)                   | KMS Centralize Flow log key arn                                     |
