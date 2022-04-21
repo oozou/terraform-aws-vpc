@@ -32,7 +32,7 @@ module "hub_vpc" {
   is_enable_dns_support   = true  # default true
 
   # Flow log confug
-  spoke_account_ids = ["557291035693"]
+  spoke_account_ids = ["557291035693", "447291035123", "33391035333"]
   centralize_flow_log_bucket_lifecycle_rule = [
     {
       id = "FlowLogLifecyclePolicy"
@@ -51,22 +51,6 @@ module "hub_vpc" {
   ]
 
   tags = { "Workspace" = "pc" }
-}
-
-module "secret_kms_key" {
-  source = "git@github.com:oozou/terraform-aws-kms-key.git?ref=v0.0.1"
-
-  alias_name           = format("%s-%s-flow-log-kms", "example", "dev")
-  append_random_suffix = true
-  key_type             = "service"
-  description          = format("Secure Secrets Manager's service secrets for service %s", "test")
-
-  service_key_info = {
-    aws_service_names  = tolist([format("secretsmanager.%s.amazonaws.com", "ap-southeast-1")])
-    caller_account_ids = tolist(["557291035693"])
-  }
-
-  custom_tags = { "Name" : format("%s-%s-flow-log-kms", "example", "dev") }
 }
 
 module "vpc_with_flow_log" {
@@ -93,7 +77,7 @@ module "vpc_with_flow_log" {
 
   # Flow log confug
   centralize_flow_log_bucket_name = module.hub_vpc.centralize_flow_log_bucket_name
-  centrailize_flow_log_kms_key_id = module.secret_kms_key.key_id
+  centrailize_flow_log_kms_key_id = module.hub_vpc.centralize_flow_log_key_id
 
   tags = { "Workspace" = "pc" }
 }
