@@ -72,8 +72,9 @@ resource "aws_internet_gateway" "this" {
 resource "aws_subnet" "public" {
   count = var.is_create_vpc && length(var.public_subnets) > 0 && (false == var.is_one_nat_gateway_per_az || length(var.public_subnets) >= length(var.availability_zone)) ? length(var.public_subnets) : 0
 
-  vpc_id     = aws_vpc.this[0].id
-  cidr_block = var.public_subnets[count.index]
+  vpc_id                  = aws_vpc.this[0].id
+  cidr_block              = var.public_subnets[count.index]
+  map_public_ip_on_launch = var.is_map_public_ip_on_launch_public_subnet
 
   # If create single public subnet, AWS will take care of availability zones
   availability_zone = element(var.availability_zone, count.index)
