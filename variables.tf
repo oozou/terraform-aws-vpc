@@ -234,3 +234,9 @@ variable "centralize_flow_log_bucket_lifecycle_rule" {
   }))
   default = []
 }
+
+variable "is_map_public_ip_on_launch_public_subnet" {
+  description = "Specify true to indicate that instances launched into public subnets will be assigned a public IP address"
+  type        = bool
+  default     = false
+}
