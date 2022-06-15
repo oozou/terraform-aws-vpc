@@ -7,7 +7,7 @@ module "centralize_flow_log_bucket" {
   environment = "centralize"
 
   centralize_hub     = true
-  versioning_enabled = truet
+  versioning_enabled = true
   force_s3_destroy   = false
 
   is_enable_s3_hardening_policy = false
