@@ -7,7 +7,8 @@ data "aws_caller_identity" "current" {}
 resource "aws_cloudwatch_log_group" "flow_log" {
   count             = var.is_create_flow_log ? 1 : 0
   name              = "/aws/vpc/${local.name}-flow-log"
-  retention_in_days = var.flow_log_retention_in_days
+  retention_in_days = var.cloudwatch_log_retention_in_days
+  kms_key_id        = var.account_mode == "spoke" ? var.kms_key_id : module.flow_log_kms[0].key_arn
 
   tags = merge(local.tags, { Name = "/aws/vpc/${local.name}-flow-log" })
 }

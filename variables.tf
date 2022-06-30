@@ -199,7 +199,7 @@ variable "centralize_flow_log_bucket_name" {
   default     = ""
 }
 
-variable "centrailize_flow_log_kms_key_id" {
+variable "centralize_flow_log_kms_key_id" {
   description = "The ARN for the KMS encryption key. Leave this default if account_mode is hub. If account_mode is spoke, please provide centrailize kms key arn (hub)."
   type        = string
   default     = ""
