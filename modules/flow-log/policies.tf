@@ -55,7 +55,7 @@ data "aws_iam_policy_document" "kms_flow_log" {
     condition {
       test     = "ArnLike"
       variable = "kms:EncryptionContext:aws:logs:arn"
-      values   = ["arn:aws:logs:ap-southeast-1:*:log-group:/aws/vpc/${var.prefix}*"]
+      values   = ["arn:aws:logs:${data.aws_region.this.name}:*:log-group:/aws/vpc/${var.prefix}*"]
     }
   }
 }
