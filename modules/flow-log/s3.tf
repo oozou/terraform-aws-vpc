@@ -5,13 +5,13 @@ module "centralize_flow_log_bucket" {
   prefix      = var.prefix
   bucket_name = "account-flow-log"
   environment = "centralize"
+  bucket_mode = "default"
 
   centralize_hub     = true
   versioning_enabled = true
   force_s3_destroy   = false
 
-  is_enable_s3_hardening_policy = false
-
+  is_enable_s3_hardening_policy      = false
   is_create_consumer_readonly_policy = true
 
   lifecycle_rules = var.centralize_flow_log_bucket_lifecycle_rule
