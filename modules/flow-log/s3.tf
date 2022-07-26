@@ -1,11 +1,10 @@
 module "centralize_flow_log_bucket" {
   count  = 1 - local.account_mode
-  source = "git@github.com:oozou/terraform-aws-s3.git?ref=DTPK-165-fix-s-3-security"
+  source = "git@github.com:oozou/terraform-aws-s3.git?ref=v1.1.1"
 
   prefix      = var.prefix
   bucket_name = "account-flow-log"
   environment = "centralize"
-  bucket_mode = "default"
 
   centralize_hub     = true
   versioning_enabled = true
