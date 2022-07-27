@@ -53,7 +53,7 @@ module "flow_log" {
 
 | Name                                                                                                                     | Source                                         | Version |
 |--------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|---------|
-| <a name="module_centralize_flow_log_bucket"></a> [centralize\_flow\_log\_bucket](#module\_centralize\_flow\_log\_bucket) | git@github.com:oozou/terraform-aws-s3.git      | v1.1.1  |
+| <a name="module_centralize_flow_log_bucket"></a> [centralize\_flow\_log\_bucket](#module\_centralize\_flow\_log\_bucket) | git@github.com:oozou/terraform-aws-s3.git      | v1.1.2  |
 | <a name="module_flow_log_kms"></a> [flow\_log\_kms](#module\_flow\_log\_kms)                                             | git@github.com:oozou/terraform-aws-kms-key.git | v1.0.0  |
 
 ## Resources
