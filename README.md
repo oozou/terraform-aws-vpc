@@ -112,7 +112,7 @@ module "spoke_without_everything" {
 
 | Name                                              | Version |
 |---------------------------------------------------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.20.1  |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.23.0  |
 
 ## Modules
 

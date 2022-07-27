@@ -53,21 +53,23 @@ module "flow_log" {
 
 | Name                                                                                                                     | Source                                         | Version |
 |--------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|---------|
-| <a name="module_centralize_flow_log_bucket"></a> [centralize\_flow\_log\_bucket](#module\_centralize\_flow\_log\_bucket) | git@github.com:oozou/terraform-aws-s3          | v1.0.4  |
+| <a name="module_centralize_flow_log_bucket"></a> [centralize\_flow\_log\_bucket](#module\_centralize\_flow\_log\_bucket) | git@github.com:oozou/terraform-aws-s3.git      | v1.1.2  |
 | <a name="module_flow_log_kms"></a> [flow\_log\_kms](#module\_flow\_log\_kms)                                             | git@github.com:oozou/terraform-aws-kms-key.git | v1.0.0  |
 
 ## Resources
 
-| Name                                                                                                                                       | Type        |
-|--------------------------------------------------------------------------------------------------------------------------------------------|-------------|
-| [aws_cloudwatch_log_group.flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group)      | resource    |
-| [aws_flow_log.cloudwatch_dest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log)                       | resource    |
-| [aws_flow_log.s3_dest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log)                               | resource    |
-| [aws_iam_policy.flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy)                          | resource    |
-| [aws_iam_role.flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                              | resource    |
-| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)              | data source |
-| [aws_iam_policy_document.kms_flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
-| [aws_iam_policy_document.s3_flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document)  | data source |
+| Name                                                                                                                                                     | Type        |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------|-------------|
+| [aws_cloudwatch_log_group.flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group)                    | resource    |
+| [aws_flow_log.cloudwatch_dest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log)                                     | resource    |
+| [aws_flow_log.s3_dest](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/flow_log)                                             | resource    |
+| [aws_iam_policy.flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy)                                        | resource    |
+| [aws_iam_role.flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role)                                            | resource    |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)                            | data source |
+| [aws_iam_policy_document.force_ssl_s3_communication](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
+| [aws_iam_policy_document.kms_flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document)               | data source |
+| [aws_iam_policy_document.s3_flow_log](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document)                | data source |
+| [aws_region.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region)                                                 | data source |
 
 ## Inputs
 

@@ -4,7 +4,8 @@ locals {
   account_mode = var.account_mode != "hub" ? 1 : 0
   name         = format("%s-%s", var.prefix, var.environment)
 
-  account_ids = concat(var.spoke_account_ids, [data.aws_caller_identity.current.account_id])
+  account_ids        = concat(var.spoke_account_ids, [data.aws_caller_identity.current.account_id])
+  policy_identifiers = [for account in local.account_ids : join("", ["arn:aws:iam::", account, ":root"])]
 
   centralize_flow_log_bucket_arn = var.centralize_flow_log_bucket_name == "" ? try(module.centralize_flow_log_bucket[0].bucket_arn, "") : join("", ["arn:aws:s3:::", var.centralize_flow_log_bucket_name])
   tags = merge(
