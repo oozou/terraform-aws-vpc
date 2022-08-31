@@ -37,6 +37,12 @@ variable "cidr" {
   type        = string
 }
 
+variable "secondary_cidr" {
+  description = "The Secondary CIDR block for the VPC"
+  type        = string
+  default     = ""
+}
+
 variable "instance_tenancy" {
   description = "A tenancy option for instances launched into the VPC"
   type        = string
@@ -53,18 +59,6 @@ variable "is_enable_dns_support" {
   description = "Should be true to enable DNS support in the VPC"
   type        = bool
   default     = true
-}
-
-variable "is_enable_classiclink" {
-  description = "Should be true to enable ClassicLink for the VPC. Only valid in regions and accounts that support EC2 Classic."
-  type        = bool
-  default     = null
-}
-
-variable "is_enable_classiclink_dns_support" {
-  description = "Should be true to enable ClassicLink DNS Support for the VPC. Only valid in regions and accounts that support EC2 Classic."
-  type        = bool
-  default     = null
 }
 
 variable "is_enable_ipv6" {
@@ -148,17 +142,23 @@ variable "availability_zone" {
 }
 /* ----------------------------- public subnets ----------------------------- */
 variable "public_subnets" {
-  description = "The CIDR block for the public subnets. Required 3 subnets for availability zones"
+  description = "The CIDR block for the public subnets."
   type        = list(string)
 }
 /* ----------------------------- private subnets ---------------------------- */
 variable "private_subnets" {
-  description = "The CIDR block for the private subnets. Required 3 subnets for availability zones"
+  description = "The CIDR block for the private subnets."
   type        = list(string)
 }
 /* ---------------------------- database subnets ---------------------------- */
 variable "database_subnets" {
-  description = "The CIDR block for the database subnets. Required 3 subnets for availability zones"
+  description = "The CIDR block for the database subnets."
+  type        = list(string)
+  default     = []
+}
+/* ---------------------------- secondary subnets --------------------------- */
+variable "secondary_subnets" {
+  description = "The CIDR block for the secondary subnets."
   type        = list(string)
   default     = []
 }

@@ -1,16 +1,23 @@
 module "vpc" {
-  source                       = "../../"
-  prefix                       = var.prefix
-  environment                  = var.environment
-  cidr                         = "10.105.0.0/16"
-  private_subnets              = ["10.105.60.0/22", "10.105.64.0/22", "10.105.68.0/22"]
-  public_subnets               = ["10.105.0.0/24", "10.105.1.0/24", "10.105.2.0/24"]
-  database_subnets             = ["10.105.20.0/23", "10.105.22.0/23", "10.105.24.0/23"]
-  availability_zone            = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
-  is_enable_dns_hostnames      = true
-  is_enable_dns_support        = true
-  is_create_nat_gateway        = true
-  is_enable_single_nat_gateway = true
-  account_mode                 = "hub"
-  tags                         = var.custom_tags
+  source       = "../../"
+  prefix       = var.prefix
+  environment  = var.environment
+  account_mode = "hub"
+
+  cidr              = "172.17.170.128/25"
+  secondary_cidr    = "100.64.0.0/16"
+  secondary_subnets = ["100.64.1.0/24", "100.64.2.0/24"]
+  public_subnets    = ["172.17.170.128/28", "172.17.170.144/28"]
+  private_subnets   = ["172.17.170.192/27", "172.17.170.224/27"]
+  database_subnets  = ["172.17.170.160/28", "172.17.170.176/28"]
+  availability_zone = ["ap-southeast-1b", "ap-southeast-1c"]
+
+  is_create_nat_gateway             = true
+  is_enable_single_nat_gateway      = false
+  is_enable_dns_hostnames           = true
+  is_enable_dns_support             = true
+  is_create_flow_log                = false
+  is_enable_flow_log_s3_integration = false
+
+  tags = var.custom_tags
 }

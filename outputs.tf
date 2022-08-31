@@ -16,6 +16,11 @@ output "vpc_cidr_block" {
   value       = aws_vpc.this[*].cidr_block
 }
 
+output "secondary_vpc_cidr_block" {
+  description = "The CIDR block of the VPC"
+  value       = aws_vpc_ipv4_cidr_block_association.secondary_cidr[*].cidr_block
+}
+
 output "default_security_gruop_id" {
   description = "The ID of the security group created by default on VPC creation"
   value       = try(aws_default_security_group.this[0].id, "")
@@ -40,6 +45,11 @@ output "igw_arn" {
 output "natgw_ids" {
   description = "List of NAT Gateway IDs"
   value       = aws_nat_gateway.nat[*].id
+}
+
+output "secondary_natgw_ids" {
+  description = "List of Secondary NAT Gateway IDs"
+  value       = aws_nat_gateway.secondary_nat[*].id
 }
 
 /* -------------------------------------------------------------------------- */
@@ -108,6 +118,29 @@ output "database_subnet_cidr_blocks" {
 output "database_subnet_ipv6_cidr_blocks" {
   description = "List of IPv6 cidr_blocks of database subnets in an IPv6 enabled VPC"
   value       = aws_subnet.database[*].ipv6_cidr_block
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               Private Subnets                              */
+/* -------------------------------------------------------------------------- */
+output "secondary_subnet_ids" {
+  description = "List of IDs of secondary subnets"
+  value       = aws_subnet.secondary[*].id
+}
+
+output "secondary_subnet_arns" {
+  description = "List of ARNs of secondary subnets"
+  value       = aws_subnet.secondary[*].arn
+}
+
+output "secondary_subnet_cidrs_blocks" {
+  description = "List if cidr_blocks of secondary subnets"
+  value       = aws_subnet.secondary[*].cidr_block
+}
+
+output "secondary_subnet_ipv6_cidr_blocks" {
+  description = "List of IPv6 cidr_blocks of secondary subnets in an IPv6 enabled VPC"
+  value       = aws_subnet.secondary[*].ipv6_cidr_block
 }
 
 /* -------------------------------------------------------------------------- */
