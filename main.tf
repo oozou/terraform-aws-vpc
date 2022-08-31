@@ -158,24 +158,13 @@ resource "aws_nat_gateway" "nat" {
   )
 }
 /* ------------------------------ Secondary NAT ----------------------------- */
-resource "aws_eip" "secondary_nat" {
-  count = var.is_create_vpc && var.is_create_nat_gateway ? local.nat_gateway_count : 0
-
-  vpc = true
-
-  tags = merge(
-    local.tags,
-    { "Name" = local.nat_gateway_count > 1 ? format("%s-eip-secondary-nat-%s", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-eip-secondary-nat", local.name) }
-  )
-}
-
 resource "aws_nat_gateway" "secondary_nat" {
   count = var.is_create_vpc && var.is_create_nat_gateway ? local.nat_gateway_count : 0
 
   depends_on = [aws_internet_gateway.this[0]]
 
-  allocation_id = element(aws_eip.secondary_nat[*].id, var.is_enable_single_nat_gateway ? 0 : count.index)
-  subnet_id     = element(aws_subnet.public[*].id, var.is_enable_single_nat_gateway ? 0 : count.index)
+  subnet_id         = element(aws_subnet.private[*].id, var.is_enable_single_nat_gateway ? 0 : count.index)
+  connectivity_type = "private"
 
   tags = merge(
     local.tags,

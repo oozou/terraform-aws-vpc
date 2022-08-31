@@ -121,7 +121,7 @@ output "database_subnet_ipv6_cidr_blocks" {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                               Private Subnets                              */
+/*                              Secondary Subnets                             */
 /* -------------------------------------------------------------------------- */
 output "secondary_subnet_ids" {
   description = "List of IDs of secondary subnets"
