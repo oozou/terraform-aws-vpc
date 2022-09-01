@@ -6,10 +6,10 @@ module "vpc" {
 
   cidr              = "172.17.170.128/25"
   secondary_cidr    = "100.64.0.0/16"
-  secondary_subnets = ["100.64.1.0/24", "100.64.2.0/24"]
-  public_subnets    = ["172.17.170.128/28", "172.17.170.144/28"]
-  private_subnets   = ["172.17.170.192/27", "172.17.170.224/27"]
-  database_subnets  = ["172.17.170.160/28", "172.17.170.176/28"]
+  secondary_subnets = ["100.64.0.0/18", "100.64.64.0/18"]
+  public_subnets    = ["172.17.170.192/28", "172.17.170.208/28"]
+  private_subnets   = ["172.17.170.224/28", "172.17.170.240/28"]
+  database_subnets  = ["172.17.170.128/27", "172.17.170.160/27"]
   availability_zone = ["ap-southeast-1b", "ap-southeast-1c"]
 
   is_create_nat_gateway             = true

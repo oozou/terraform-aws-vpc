@@ -159,7 +159,7 @@ resource "aws_nat_gateway" "nat" {
 }
 /* ------------------------------ Secondary NAT ----------------------------- */
 resource "aws_nat_gateway" "secondary_nat" {
-  count = var.is_create_vpc && var.is_create_nat_gateway ? local.nat_gateway_count : 0
+  count = var.is_create_vpc && var.is_create_nat_gateway && var.secondary_cidr != "" ? local.nat_gateway_count : 0
 
   depends_on = [aws_internet_gateway.this[0]]
 
