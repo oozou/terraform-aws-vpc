@@ -2,6 +2,37 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.1.8] - 2022-09-05
+
+### Added
+
+- Add resource `aws_vpc_ipv4_cidr_block_association.secondary_cidr` to associate vpc with second CIDR using for application
+- Add resource `aws_subnet.secondary`
+- Add resource `aws_nat_gateway.secondary_nat` as private connection in private subnet
+- Add resource `aws_route_table.secondary` for secondary subnet
+- Add resource `aws_route.secondary_nat_gateway` for secondary CIDR to use NAT as default route
+- Add resource `aws_route.secondary_nat_gateway_ipv6` for secondary CIDR to use NAT as default route (IPv6)
+- Add resource `aws_route_table_association.secondary` to associate route table with subnet
+- Add output `secondary_vpc_cidr_block`
+- Add output `secondary_natgw_ids`
+- Add output `secondary_subnet_ids`
+- Add output `secondary_subnet_arns`
+- Add output `secondary_subnet_cidrs_blocks`
+- Add output `secondary_subnet_ipv6_cidr_blocks`
+- Add variable `var.secondary_cidr`
+- Add variable `var.secondary_subnets`
+
+### Changed
+
+- Update description for variable `var.public_subnets`
+- Update description for variable `var.private_subnets`
+- Update description for variable `var.database_subnets`
+
+### Removed
+
+- Remove variable `var.enable_classiclink` due to deprecation
+- Remove variable `var.is_enable_classiclink_dns_support` due to deprecation
+
 ## [v1.1.7] - 2022-07-27
 
 ### Changed
