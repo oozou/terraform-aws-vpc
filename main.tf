@@ -159,7 +159,7 @@ resource "aws_nat_gateway" "nat" {
 }
 /* ------------------------------ Secondary NAT ----------------------------- */
 resource "aws_nat_gateway" "secondary_nat" {
-  count = var.is_create_vpc && var.is_create_nat_gateway && var.secondary_cidr != "" ? local.nat_gateway_count : 0
+  count = var.is_create_vpc && length(var.secondary_subnets) > 0 && var.secondary_cidr != "" && var.is_create_secondary_nat_gateway ? local.nat_gateway_count : 0
 
   depends_on = [aws_internet_gateway.this[0]]
 
@@ -303,7 +303,7 @@ resource "aws_route_table_association" "database" {
 /* -------------------------------------------------------------------------- */
 /* ------------------------------- route table ------------------------------ */
 resource "aws_route_table" "secondary" {
-  count = var.is_create_vpc && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
+  count = var.is_create_vpc && length(var.secondary_subnets) > 0 && var.secondary_cidr != "" ? local.nat_gateway_count : 0
 
   vpc_id = aws_vpc.this[0].id
 
@@ -314,7 +314,7 @@ resource "aws_route_table" "secondary" {
 }
 
 resource "aws_route" "secondary_nat_gateway" {
-  count = var.is_create_vpc && var.is_create_nat_gateway && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
+  count = var.is_create_vpc && var.is_create_secondary_nat_gateway && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
 
   route_table_id         = element(aws_route_table.secondary[*].id, count.index)
   destination_cidr_block = "0.0.0.0/0"
@@ -326,7 +326,7 @@ resource "aws_route" "secondary_nat_gateway" {
 }
 
 resource "aws_route" "secondary_nat_gateway_ipv6" {
-  count = var.is_create_vpc && var.is_create_nat_gateway && var.is_enable_ipv6 && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
+  count = var.is_create_vpc && var.is_create_secondary_nat_gateway && var.is_enable_ipv6 && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
 
   route_table_id              = element(aws_route_table.secondary[*].id, count.index)
   destination_ipv6_cidr_block = "::/0"

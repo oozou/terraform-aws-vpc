@@ -2,7 +2,7 @@
 
 All notable changes to this module will be documented in this file.
 
-## [v1.1.8] - 2022-09-14
+## [v1.1.8] - 2022-09-15
 
 ### Added
 
@@ -21,6 +21,8 @@ All notable changes to this module will be documented in this file.
 - Add output `secondary_subnet_ipv6_cidr_blocks`
 - Add variable `var.secondary_cidr`
 - Add variable `var.secondary_subnets`
+- Add variable `var.is_create_secondary_nat_gateway` to allow non-nat creation
+- Add secondary cidr `./examples/secondary-cidr`
 
 ### Changed
 

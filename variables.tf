@@ -121,6 +121,12 @@ variable "is_create_nat_gateway" {
   default     = false
 }
 
+variable "is_create_secondary_nat_gateway" {
+  description = "Whether to create private secondary nat gatewat or not"
+  type        = bool
+  default     = false
+}
+
 variable "is_enable_single_nat_gateway" {
   description = "Should be true if you want to provision a single shared NAT Gateway across all of your private networks"
   type        = bool
