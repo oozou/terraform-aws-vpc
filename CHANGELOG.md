@@ -29,6 +29,7 @@ All notable changes to this module will be documented in this file.
 - Update description for variable `var.public_subnets`
 - Update description for variable `var.private_subnets`
 - Update description for variable `var.database_subnets`
+- Update file `.gitignore`
 
 ### Removed
 
