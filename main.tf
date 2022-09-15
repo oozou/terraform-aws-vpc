@@ -8,14 +8,19 @@ resource "aws_vpc" "this" {
   instance_tenancy                 = var.instance_tenancy
   enable_dns_hostnames             = var.is_enable_dns_hostnames
   enable_dns_support               = var.is_enable_dns_support
-  enable_classiclink               = var.is_enable_classiclink
-  enable_classiclink_dns_support   = var.is_enable_classiclink_dns_support
   assign_generated_ipv6_cidr_block = var.is_enable_ipv6
 
   tags = merge(
     local.tags,
     { "Name" = format("%s-vpc", local.name) }
   )
+}
+
+resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
+  count = var.is_create_vpc && var.secondary_cidr != "" ? 1 : 0
+
+  vpc_id     = aws_vpc.this[0].id
+  cidr_block = var.secondary_cidr
 }
 
 resource "aws_vpc_dhcp_options" "this" {
@@ -50,7 +55,6 @@ resource "aws_default_security_group" "this" {
     { "Name" = format("%s-default-sg", local.name) }
   )
 }
-
 /* -------------------------------------------------------------------------- */
 /*                              Internet Gateway                              */
 /* -------------------------------------------------------------------------- */
@@ -64,7 +68,6 @@ resource "aws_internet_gateway" "this" {
     { "Name" = format("%s-internet-gateway", local.name) }
   )
 }
-
 /* -------------------------------------------------------------------------- */
 /*                                   Subnets                                  */
 /* -------------------------------------------------------------------------- */
@@ -112,10 +115,24 @@ resource "aws_subnet" "database" {
     { "Name" = length(var.database_subnets) > 1 ? format("%s-database-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-database-subnet", local.name) }
   )
 }
+/* ---------------------------- secondary subnets --------------------------- */
+resource "aws_subnet" "secondary" {
+  count = var.is_create_vpc && length(var.secondary_subnets) > 0 && var.secondary_cidr != "" ? length(var.secondary_subnets) : 0
 
+  vpc_id            = aws_vpc.this[0].id
+  cidr_block        = var.secondary_subnets[count.index]
+  availability_zone = element(var.availability_zone, count.index)
+
+  tags = merge(
+    local.tags,
+    var.is_enable_eks_auto_discovery ? local.eks_lb_controller_private_tag : {},
+    { "Name" = length(var.secondary_subnets) > 1 ? format("%s-secondary-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-secondary-subnet", local.name) }
+  )
+}
 /* -------------------------------------------------------------------------- */
 /*                                     NAT                                    */
 /* -------------------------------------------------------------------------- */
+/* -------------------------------- Main Nat -------------------------------- */
 resource "aws_eip" "nat" {
   count = var.is_create_vpc && var.is_create_nat_gateway ? local.nat_gateway_count : 0
 
@@ -140,7 +157,20 @@ resource "aws_nat_gateway" "nat" {
     { "Name" = local.nat_gateway_count > 1 ? format("%s-nat-%s", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-nat", local.name) }
   )
 }
+/* ------------------------------ Secondary NAT ----------------------------- */
+resource "aws_nat_gateway" "secondary_nat" {
+  count = var.is_create_vpc && length(var.secondary_subnets) > 0 && var.secondary_cidr != "" && var.is_create_secondary_nat_gateway ? local.nat_gateway_count : 0
 
+  depends_on = [aws_internet_gateway.this[0]]
+
+  subnet_id         = element(aws_subnet.private[*].id, var.is_enable_single_nat_gateway ? 0 : count.index)
+  connectivity_type = "private"
+
+  tags = merge(
+    local.tags,
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-secondary-nat-%s", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-secondary-nat", local.name) }
+  )
+}
 /* -------------------------------------------------------------------------- */
 /*                             Public Route Table                             */
 /* -------------------------------------------------------------------------- */
@@ -267,4 +297,49 @@ resource "aws_route_table_association" "database" {
 
   subnet_id      = element(aws_subnet.database[*].id, count.index)
   route_table_id = element(aws_route_table.database[*].id, count.index)
+}
+/* -------------------------------------------------------------------------- */
+/*                            Secondary Route Table                           */
+/* -------------------------------------------------------------------------- */
+/* ------------------------------- route table ------------------------------ */
+resource "aws_route_table" "secondary" {
+  count = var.is_create_vpc && length(var.secondary_subnets) > 0 && var.secondary_cidr != "" ? local.nat_gateway_count : 0
+
+  vpc_id = aws_vpc.this[0].id
+
+  tags = merge(
+    local.tags,
+    { "Name" = local.nat_gateway_count > 1 ? format("%s-secondary-%s-rtb", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-secondary-rtb", local.name) }
+  )
+}
+
+resource "aws_route" "secondary_nat_gateway" {
+  count = var.is_create_vpc && var.is_create_secondary_nat_gateway && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
+
+  route_table_id         = element(aws_route_table.secondary[*].id, count.index)
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = element(aws_nat_gateway.secondary_nat[*].id, count.index)
+
+  timeouts {
+    create = "5m"
+  }
+}
+
+resource "aws_route" "secondary_nat_gateway_ipv6" {
+  count = var.is_create_vpc && var.is_create_secondary_nat_gateway && var.is_enable_ipv6 && length(var.secondary_subnets) > 0 ? local.nat_gateway_count : 0
+
+  route_table_id              = element(aws_route_table.secondary[*].id, count.index)
+  destination_ipv6_cidr_block = "::/0"
+  nat_gateway_id              = element(aws_nat_gateway.secondary_nat[*].id, count.index)
+
+  timeouts {
+    create = "5m"
+  }
+}
+/* ---------------------------- route association --------------------------- */
+resource "aws_route_table_association" "secondary" {
+  count = var.is_create_vpc && length(var.secondary_subnets) > 0 ? length(var.secondary_subnets) : 0
+
+  subnet_id      = element(aws_subnet.secondary[*].id, count.index)
+  route_table_id = element(aws_route_table.secondary[*].id, count.index)
 }

@@ -14,6 +14,13 @@ locals {
 
   availability_zone_shorten = [for az in var.availability_zone : element(split("-", az), 2)]
 
+  eks_lb_controller_public_tag = {
+    "kubernetes.io/role/elb" = 1
+  }
+  eks_lb_controller_private_tag = {
+    "kubernetes.io/role/internal-elb" = 1
+  }
+
   tags = merge(
     {
       "Environment" = var.environment,
@@ -21,10 +28,4 @@ locals {
     },
     var.tags
   )
-  eks_lb_controller_public_tag = {
-    "kubernetes.io/role/elb" = 1
-  }
-  eks_lb_controller_private_tag = {
-    "kubernetes.io/role/internal-elb" = 1
-  }
 }
