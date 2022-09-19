@@ -1,6 +1,8 @@
 module "centralize_flow_log_bucket" {
-  count  = 1 - local.account_mode
-  source = "git@github.com:oozou/terraform-aws-s3.git?ref=v1.1.2"
+  count   = 1 - local.account_mode
+  source  = "oozou/s3/aws"
+  version = "1.1.2"
+
 
   prefix      = var.prefix
   bucket_name = "account-flow-log"
