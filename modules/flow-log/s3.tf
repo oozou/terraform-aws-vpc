@@ -1,7 +1,7 @@
 module "centralize_flow_log_bucket" {
   count   = 1 - local.account_mode
   source  = "oozou/s3/aws"
-  version = "1.1.2"
+  version = "1.1.3"
 
 
   prefix      = var.prefix
