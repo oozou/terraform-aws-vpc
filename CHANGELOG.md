@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.2.2] - 2022-09-19
+
+### Changed
+
+- In S3, Change to use from public registry
+
 ## [v1.2.1] - 2022-09-19
 
 ### Changed
