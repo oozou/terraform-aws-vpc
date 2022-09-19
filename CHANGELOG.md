@@ -2,7 +2,13 @@
 
 All notable changes to this module will be documented in this file.
 
-## [v1.1.8] - 2022-09-15
+## [v1.2.1] - 2022-09-19
+
+### Changed
+
+- Flowlog to use Public modules
+
+## [v1.2.0] - 2022-09-15
 
 ### Added
 
