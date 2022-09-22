@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.2.3] - 2022-09-22
+
+### Changed
+
+- Update source and version module of `centralize_flow_log_bucket` and `flow_log_kms`
+
 ## [v1.2.2] - 2022-09-19
 
 ### Changed
