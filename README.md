@@ -10,7 +10,8 @@ Terraform module with create vpc and subnet resources on AWS.
 
 ```terraform
 module "hub" {
-  source = "<source>"
+  source  = "oozou/vpc/aws"
+  version = "<version>"
 
   prefix       = "oozou"
   environment  = "devops"
@@ -51,7 +52,8 @@ module "hub" {
 }
 
 module "spoke" {
-  source = "<source>"
+  source  = "oozou/vpc/aws"
+  version = "<version>"
 
   prefix       = "oozou"
   environment  = "dev"
@@ -77,7 +79,8 @@ module "spoke" {
 }
 
 module "spoke_without_everything" {
-  source = "<source>"
+  source  = "oozou/vpc/aws"
+  version = "<version>"
 
   prefix       = "oozou"
   environment  = "dev"
