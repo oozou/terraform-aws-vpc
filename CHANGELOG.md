@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.2.4] - 2022-09-27
+
+### Added
+
+- Output route_table_ids `route_table_public_id`, `route_table_private_id` and `route_table_database_id`
+
 ## [v1.2.3] - 2022-09-22
 
 ### Changed
