@@ -185,3 +185,22 @@ output "centralize_flow_log_key_id" {
   description = "KMS Centralize Flow log key id"
   value       = join("", module.flow_log[*].centralize_flow_log_key_id)
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                 Route Table                                */
+/* -------------------------------------------------------------------------- */
+
+output "route_table_public_id" {
+  description = "Route table public id"
+  value       = try(aws_route_table.public[0].id, "")
+}
+
+output "route_table_private_id" {
+  description = "Route table private id"
+  value       = try(aws_route_table.private[0].id, "")
+}
+
+output "route_table_database_id" {
+  description = "Route table database id"
+  value       = try(aws_route_table.database[0].id, "")
+}
