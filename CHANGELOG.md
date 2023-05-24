@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v1.2.5] - 2023-05-24
+
+### Changed
+
+- Update `aws_route_table.database` by removing is_create_nat_gateway condition
+
 ## [v1.2.4] - 2022-09-27
 
 ### Added

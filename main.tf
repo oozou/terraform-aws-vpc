@@ -258,7 +258,7 @@ resource "aws_route_table_association" "private" {
 /* -------------------------------------------------------------------------- */
 /* ------------------------------- route table ------------------------------ */
 resource "aws_route_table" "database" {
-  count = var.is_create_vpc && var.is_create_database_subnet_route_table && length(var.database_subnets) > 0 && var.is_create_nat_gateway ? var.is_enable_single_nat_gateway ? 1 : length(var.database_subnets) : 0
+  count = var.is_create_vpc && var.is_create_database_subnet_route_table && length(var.database_subnets) > 0 ? local.nat_gateway_count : 0
 
   vpc_id = aws_vpc.this[0].id
 
