@@ -38,10 +38,10 @@ module "flow_log" {
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-| Name                                                                      | Version  |
-|---------------------------------------------------------------------------|----------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 4.00  |
+| Name                                                                      | Version           |
+|---------------------------------------------------------------------------|-------------------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0          |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 5.0.0, < 6.0.0 |
 
 ## Providers
 
@@ -53,8 +53,8 @@ module "flow_log" {
 
 | Name                                                                                                                     | Source            | Version |
 |--------------------------------------------------------------------------------------------------------------------------|-------------------|---------|
-| <a name="module_centralize_flow_log_bucket"></a> [centralize\_flow\_log\_bucket](#module\_centralize\_flow\_log\_bucket) | oozou/s3/aws      | 1.1.3   |
-| <a name="module_flow_log_kms"></a> [flow\_log\_kms](#module\_flow\_log\_kms)                                             | oozou/kms-key/aws | 1.0.0   |
+| <a name="module_centralize_flow_log_bucket"></a> [centralize\_flow\_log\_bucket](#module\_centralize\_flow\_log\_bucket) | oozou/s3/aws      | 2.0.0   |
+| <a name="module_flow_log_kms"></a> [flow\_log\_kms](#module\_flow\_log\_kms)                                             | oozou/kms-key/aws | 2.0.0   |
 
 ## Resources
 
