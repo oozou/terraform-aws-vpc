@@ -1,6 +1,6 @@
 module "centralize_flow_log_bucket" {
   source  = "oozou/s3/aws"
-  version = "2.0.0"
+  version = "2.0.1"
 
   count = 1 - local.account_mode
 
