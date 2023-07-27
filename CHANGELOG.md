@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v2.0.2] - 2023-07-27
+
+### Added
+
+- Support resources tagging with these variables: `var.vpc_tags`, `var.dhcp_options_tags`, `var.public_subnet_tags`, `var.private_subnet_tags`, `var.database_subnet_tags`, `var.secondary_subnet_tags`, `var.public_route_table_tags`, `var.private_route_table_tags`, `var.database_route_table_tags`, `var.secondary_route_table_tags`
+
 ## [v2.0.1] - 2023-06-15
 
 ### Changed
