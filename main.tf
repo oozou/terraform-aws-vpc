@@ -12,6 +12,7 @@ resource "aws_vpc" "this" {
 
   tags = merge(
     local.tags,
+    var.vpc_tags,
     { "Name" = format("%s-vpc", local.name) }
   )
 }
@@ -34,6 +35,7 @@ resource "aws_vpc_dhcp_options" "this" {
 
   tags = merge(
     local.tags,
+    var.dhcp_options_tags,
     { "Name" = format("%s-dhcp-options", local.name) }
   )
 }
@@ -84,6 +86,7 @@ resource "aws_subnet" "public" {
 
   tags = merge(
     local.tags,
+    var.public_subnet_tags,
     var.is_enable_eks_auto_discovery ? local.eks_lb_controller_public_tag : {},
     { "Name" = length(var.public_subnets) > 1 ? format("%s-public-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-public-subnet", local.name) }
   )
@@ -98,6 +101,7 @@ resource "aws_subnet" "private" {
 
   tags = merge(
     local.tags,
+    var.private_subnet_tags,
     var.is_enable_eks_auto_discovery ? local.eks_lb_controller_private_tag : {},
     { "Name" = length(var.private_subnets) > 1 ? format("%s-private-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-private-subnet", local.name) }
   )
@@ -112,6 +116,7 @@ resource "aws_subnet" "database" {
 
   tags = merge(
     local.tags,
+    var.database_subnet_tags,
     { "Name" = length(var.database_subnets) > 1 ? format("%s-database-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-database-subnet", local.name) }
   )
 }
@@ -125,6 +130,7 @@ resource "aws_subnet" "secondary" {
 
   tags = merge(
     local.tags,
+    var.secondary_subnet_tags,
     var.is_enable_eks_auto_discovery ? local.eks_lb_controller_private_tag : {},
     { "Name" = length(var.secondary_subnets) > 1 ? format("%s-secondary-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-secondary-subnet", local.name) }
   )
@@ -180,6 +186,7 @@ resource "aws_route_table" "public" {
 
   tags = merge(
     local.tags,
+    var.public_route_table_tags,
     { "Name" = format("%s-public-rtb", local.name) }
   )
 }
@@ -217,6 +224,7 @@ resource "aws_route_table" "private" {
 
   tags = merge(
     local.tags,
+    var.private_route_table_tags,
     { "Name" = local.nat_gateway_count > 1 ? format("%s-private-%s-rtb", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-private-rtb", local.name) }
   )
 }
@@ -262,6 +270,7 @@ resource "aws_route_table" "database" {
 
   tags = merge(
     local.tags,
+    var.database_route_table_tags,
     { "Name" = local.nat_gateway_count > 1 ? format("%s-database-%s-rtb", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-database-rtb", local.name) }
   )
 }
@@ -307,6 +316,7 @@ resource "aws_route_table" "secondary" {
 
   tags = merge(
     local.tags,
+    var.secondary_route_table_tags,
     { "Name" = local.nat_gateway_count > 1 ? format("%s-secondary-%s-rtb", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-secondary-rtb", local.name) }
   )
 }

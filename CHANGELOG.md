@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v2.0.2] - 2023-07-27
+
+### Added
+
+- Support resources tagging with these variables: `var.vpc_tags`, `var.dhcp_options_tags`, `var.public_subnet_tags`, `var.private_subnet_tags`, `var.database_subnet_tags`, `var.secondary_subnet_tags`, `var.public_route_table_tags`, `var.private_route_table_tags`, `var.database_route_table_tags`, `var.secondary_route_table_tags`
+
 ## [v2.0.1] - 2023-06-15
 
 ### Changed
@@ -13,6 +19,12 @@ All notable changes to this module will be documented in this file.
 ### BREAKING CHANGES
 
 - Upgrade the AWS provider to version 5 with the constraint of `>= 5.0.0, < 6.0.0`.
+
+## [v1.2.6] - 2023-07-27
+
+### Added
+
+- Support resources tagging with these variables: `var.vpc_tags`, `var.dhcp_options_tags`, `var.public_subnet_tags`, `var.private_subnet_tags`, `var.database_subnet_tags`, `var.secondary_subnet_tags`, `var.public_route_table_tags`, `var.private_route_table_tags`, `var.database_route_table_tags`, `var.secondary_route_table_tags`
 
 ## [v1.2.5] - 2023-05-24
 
