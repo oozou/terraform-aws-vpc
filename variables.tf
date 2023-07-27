@@ -66,6 +66,13 @@ variable "is_enable_ipv6" {
   type        = bool
   default     = false
 }
+
+variable "vpc_tags" {
+  description = "Additional tags for the VPC"
+  type        = map(string)
+  default     = {}
+}
+
 /* ------------------------------ DHCP options ------------------------------ */
 variable "is_enable_dhcp_options" {
   description = "Should be true if you want to specify a DHCP options set with a custom domain name, DNS servers, NTP servers, netbios servers, and/or netbios server type"
@@ -101,6 +108,12 @@ variable "dhcp_options_netbios_node_type" {
   description = "Specify netbios node_type for DHCP options set (requires enable_dhcp_options set to true)"
   type        = string
   default     = ""
+}
+
+variable "dhcp_options_tags" {
+  description = "Additional tags for the DHCP option"
+  type        = map(string)
+  default     = {}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -151,16 +164,34 @@ variable "public_subnets" {
   description = "The CIDR block for the public subnets."
   type        = list(string)
 }
+
+variable "public_subnet_tags" {
+  description = "Additional tags for the public subnets"
+  type        = map(string)
+  default     = {}
+}
 /* ----------------------------- private subnets ---------------------------- */
 variable "private_subnets" {
   description = "The CIDR block for the private subnets."
   type        = list(string)
+}
+
+variable "private_subnet_tags" {
+  description = "Additional tags for the private subnets"
+  type        = map(string)
+  default     = {}
 }
 /* ---------------------------- database subnets ---------------------------- */
 variable "database_subnets" {
   description = "The CIDR block for the database subnets."
   type        = list(string)
   default     = []
+}
+
+variable "database_subnet_tags" {
+  description = "Additional tags for the database subnets"
+  type        = map(string)
+  default     = {}
 }
 /* ---------------------------- secondary subnets --------------------------- */
 variable "secondary_subnets" {
@@ -169,13 +200,47 @@ variable "secondary_subnets" {
   default     = []
 }
 
+variable "secondary_subnet_tags" {
+  description = "Additional tags for the secondary subnets"
+  type        = map(string)
+  default     = {}
+}
+
 /* -------------------------------------------------------------------------- */
-/*                            Database Route Table                            */
+/*                                 Route Table                                */
 /* -------------------------------------------------------------------------- */
+/* --------------------------------- Public --------------------------------- */
+variable "public_route_table_tags" {
+  description = "Additional tags for the public route tables"
+  type        = map(string)
+  default     = {}
+}
+
+/* --------------------------------- Private -------------------------------- */
+variable "private_route_table_tags" {
+  description = "Additional tags for the private route tables"
+  type        = map(string)
+  default     = {}
+}
+
+/* -------------------------------- Database -------------------------------- */
 variable "is_create_database_subnet_route_table" {
   description = "Whether to create database subnet or not"
   type        = bool
   default     = true
+}
+
+variable "database_route_table_tags" {
+  description = "Additional tags for the database route tables"
+  type        = map(string)
+  default     = {}
+}
+
+/* -------------------------------- Secondary ------------------------------- */
+variable "secondary_route_table_tags" {
+  description = "Additional tags for the secondary route tables"
+  type        = map(string)
+  default     = {}
 }
 
 /* -------------------------------------------------------------------------- */
