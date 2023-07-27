@@ -4,112 +4,13 @@ Terraform module with create vpc and subnet resources on AWS.
 
 ![Design diagram](docs/design.png "Design diagram")
 
-## Usage
-
-### Hub account
-
-```terraform
-module "hub" {
-  source  = "oozou/vpc/aws"
-  version = "<version>"
-
-  prefix       = "oozou"
-  environment  = "devops"
-  account_mode = "hub"
-
-  vpc_cidr           = "10.99.0.0/16"
-  availability_zones = ["ap-southeast-1c", "ap-southeast-1b", "ap-southeast-1a"]
-  public_subnets     = ["10.99.0.0/24", "10.99.1.0/24", "10.99.2.0/24"]
-  private_subnets    = ["10.99.60.0/22", "10.99.64.0/22", "10.99.68.0/22"]
-  database_subnets   = ["10.99.20.0/23", "10.99.22.0/23", "10.99.24.0/23"]
-
-  is_create_nat_gateway             = true
-  is_enable_single_nat_gateway      = true
-  is_enable_dns_hostnames           = true
-  is_enable_dns_support             = true
-  is_create_flow_log                = true
-  is_enable_flow_log_s3_integration = true
-
-  spoke_account_ids = ["557291035691"]
-  centralize_flow_log_bucket_lifecycle_rule = [
-    {
-      id = "FlowLogLifecyclePolicy"
-      transition = [
-        {
-          days          = 31
-          storage_class = "STANDARD_IA"
-        },
-        {
-          days          = 366
-          storage_class = "GLACIER"
-        }
-      ]
-      expiration_days = 3660
-    }
-  ]
-
-  tags = { "Workspace" = "xxx-yyy-zzz" }
-}
-
-module "spoke" {
-  source  = "oozou/vpc/aws"
-  version = "<version>"
-
-  prefix       = "oozou"
-  environment  = "dev"
-  account_mode = "spoke"
-
-  vpc_cidr           = "10.100.0.0/16"
-  availability_zones = ["ap-southeast-1c", "ap-southeast-1b", "ap-southeast-1a"]
-  public_subnets     = ["10.100.0.0/24", "10.100.1.0/24", "10.100.2.0/24"]
-  private_subnets    = ["10.100.60.0/22", "10.100.64.0/22", "10.100.68.0/22"]
-  database_subnets   = ["10.100.20.0/23", "10.100.22.0/23", "10.100.24.0/23"]
-
-  is_create_nat_gateway             = true
-  is_enable_single_nat_gateway      = true
-  is_enable_dns_hostnames           = true
-  is_enable_dns_support             = true
-  is_create_flow_log                = true
-  is_enable_flow_log_s3_integration = true
-
-  centralize_flow_log_bucket_name = module.hub.centralize_flow_log_bucket_name
-  centralize_flow_log_kms_key_id  = module.hub.centralize_flow_log_key_arn
-
-  tags = { "Workspace" = "xxx-yyy-zzz" }
-}
-
-module "spoke_without_everything" {
-  source  = "oozou/vpc/aws"
-  version = "<version>"
-
-  prefix       = "oozou"
-  environment  = "dev"
-  account_mode = "spoke"
-
-  vpc_cidr           = "10.100.0.0/16"
-  availability_zones = ["ap-southeast-1c", "ap-southeast-1b", "ap-southeast-1a"]
-  public_subnets     = ["10.100.0.0/24", "10.100.1.0/24", "10.100.2.0/24"]
-  private_subnets    = ["10.100.60.0/22", "10.100.64.0/22", "10.100.68.0/22"]
-  database_subnets   = ["10.100.20.0/23", "10.100.22.0/23", "10.100.24.0/23"]
-
-  is_create_nat_gateway             = true
-  is_enable_single_nat_gateway      = true
-  is_enable_dns_hostnames           = true
-  is_enable_dns_support             = true
-  is_create_flow_log                = false
-  is_enable_flow_log_s3_integration = false
-
-  tags = { "Workspace" = "xxx-yyy-zzz" }
-}
-```
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name                                                                      | Version  |
 |---------------------------------------------------------------------------|----------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 4.00  |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws)                   | >= 5.0.0 |
 
 ## Providers
 
@@ -167,15 +68,12 @@ module "spoke_without_everything" {
 | <a name="input_centralize_flow_log_bucket_name"></a> [centralize\_flow\_log\_bucket\_name](#input\_centralize\_flow\_log\_bucket\_name)                                  | S3 bucket for store Cloudtrail log (long terms), leave this default if account\_mode is hub. If account\_mode is spoke, please provide centrailize flow log S3 bucket name (hub).     | `string`                                                                                                                                                                                                  | `""`                                       |    no    |
 | <a name="input_centralize_flow_log_kms_key_id"></a> [centralize\_flow\_log\_kms\_key\_id](#input\_centralize\_flow\_log\_kms\_key\_id)                                   | The ARN for the KMS encryption key. Leave this default if account\_mode is hub. If account\_mode is spoke, please provide centrailize kms key arn (hub).                              | `string`                                                                                                                                                                                                  | `""`                                       |    no    |
 | <a name="input_cidr"></a> [cidr](#input\_cidr)                                                                                                                           | The CIDR block for the VPC                                                                                                                                                            | `string`                                                                                                                                                                                                  | n/a                                        |   yes    |
-| <a name="input_database_route_table_tags"></a> [database\_route\_table\_tags](#input\_database\_route\_table\_tags)                                                      | Additional tags for the database route tables                                                                                                                                         | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
-| <a name="input_database_subnet_tags"></a> [database\_subnet\_tags](#input\_database\_subnet\_tags)                                                                       | Additional tags for the database subnets                                                                                                                                              | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
 | <a name="input_database_subnets"></a> [database\_subnets](#input\_database\_subnets)                                                                                     | The CIDR block for the database subnets.                                                                                                                                              | `list(string)`                                                                                                                                                                                            | `[]`                                       |    no    |
 | <a name="input_dhcp_options_domain_name"></a> [dhcp\_options\_domain\_name](#input\_dhcp\_options\_domain\_name)                                                         | Specifies DNS name for DHCP options set (requires enable\_dhcp\_options set to true)                                                                                                  | `string`                                                                                                                                                                                                  | `""`                                       |    no    |
 | <a name="input_dhcp_options_domain_name_servers"></a> [dhcp\_options\_domain\_name\_servers](#input\_dhcp\_options\_domain\_name\_servers)                               | Specify a list of DNS server addresses for DHCP options set, default to AWS provided (requires enable\_dhcp\_options set to true)                                                     | `list(string)`                                                                                                                                                                                            | <pre>[<br>  "AmazonProvidedDNS"<br>]</pre> |    no    |
 | <a name="input_dhcp_options_netbios_name_servers"></a> [dhcp\_options\_netbios\_name\_servers](#input\_dhcp\_options\_netbios\_name\_servers)                            | Specify a list of netbios servers for DHCP options set (requires enable\_dhcp\_options set to true)                                                                                   | `list(string)`                                                                                                                                                                                            | `[]`                                       |    no    |
 | <a name="input_dhcp_options_netbios_node_type"></a> [dhcp\_options\_netbios\_node\_type](#input\_dhcp\_options\_netbios\_node\_type)                                     | Specify netbios node\_type for DHCP options set (requires enable\_dhcp\_options set to true)                                                                                          | `string`                                                                                                                                                                                                  | `""`                                       |    no    |
 | <a name="input_dhcp_options_ntp_servers"></a> [dhcp\_options\_ntp\_servers](#input\_dhcp\_options\_ntp\_servers)                                                         | Specify a list of NTP servers for DHCP options set (requires enable\_dhcp\_options set to true)                                                                                       | `list(string)`                                                                                                                                                                                            | `[]`                                       |    no    |
-| <a name="input_dhcp_options_tags"></a> [dhcp\_options\_tags](#input\_dhcp\_options\_tags)                                                                                | Additional tags for the DHCP option                                                                                                                                                   | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
 | <a name="input_environment"></a> [environment](#input\_environment)                                                                                                      | Environment Variable used as a prefix                                                                                                                                                 | `string`                                                                                                                                                                                                  | n/a                                        |   yes    |
 | <a name="input_flow_log_retention_in_days"></a> [flow\_log\_retention\_in\_days](#input\_flow\_log\_retention\_in\_days)                                                 | Specifies the number of days you want to retain log events in the specified log group for VPC flow logs.                                                                              | `number`                                                                                                                                                                                                  | `90`                                       |    no    |
 | <a name="input_instance_tenancy"></a> [instance\_tenancy](#input\_instance\_tenancy)                                                                                     | A tenancy option for instances launched into the VPC                                                                                                                                  | `string`                                                                                                                                                                                                  | `"default"`                                |    no    |
@@ -195,19 +93,12 @@ module "spoke_without_everything" {
 | <a name="input_is_map_public_ip_on_launch_public_subnet"></a> [is\_map\_public\_ip\_on\_launch\_public\_subnet](#input\_is\_map\_public\_ip\_on\_launch\_public\_subnet) | Specify true to indicate that instances launched into public subnets will be assigned a public IP address                                                                             | `bool`                                                                                                                                                                                                    | `false`                                    |    no    |
 | <a name="input_is_one_nat_gateway_per_az"></a> [is\_one\_nat\_gateway\_per\_az](#input\_is\_one\_nat\_gateway\_per\_az)                                                  | Enable multiple Nat gateway and public subnets with Multi-AZ                                                                                                                          | `bool`                                                                                                                                                                                                    | `false`                                    |    no    |
 | <a name="input_prefix"></a> [prefix](#input\_prefix)                                                                                                                     | The prefix name of customer to be displayed in AWS console and resource                                                                                                               | `string`                                                                                                                                                                                                  | n/a                                        |   yes    |
-| <a name="input_private_route_table_tags"></a> [private\_route\_table\_tags](#input\_private\_route\_table\_tags)                                                         | Additional tags for the private route tables                                                                                                                                          | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
-| <a name="input_private_subnet_tags"></a> [private\_subnet\_tags](#input\_private\_subnet\_tags)                                                                          | Additional tags for the private subnets                                                                                                                                               | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
 | <a name="input_private_subnets"></a> [private\_subnets](#input\_private\_subnets)                                                                                        | The CIDR block for the private subnets.                                                                                                                                               | `list(string)`                                                                                                                                                                                            | n/a                                        |   yes    |
-| <a name="input_public_route_table_tags"></a> [public\_route\_table\_tags](#input\_public\_route\_table\_tags)                                                            | Additional tags for the public route tables                                                                                                                                           | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
-| <a name="input_public_subnet_tags"></a> [public\_subnet\_tags](#input\_public\_subnet\_tags)                                                                             | Additional tags for the public subnets                                                                                                                                                | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
 | <a name="input_public_subnets"></a> [public\_subnets](#input\_public\_subnets)                                                                                           | The CIDR block for the public subnets.                                                                                                                                                | `list(string)`                                                                                                                                                                                            | n/a                                        |   yes    |
 | <a name="input_secondary_cidr"></a> [secondary\_cidr](#input\_secondary\_cidr)                                                                                           | The Secondary CIDR block for the VPC                                                                                                                                                  | `string`                                                                                                                                                                                                  | `""`                                       |    no    |
-| <a name="input_secondary_route_table_tags"></a> [secondary\_route\_table\_tags](#input\_secondary\_route\_table\_tags)                                                   | Additional tags for the secondary route tables                                                                                                                                        | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
-| <a name="input_secondary_subnet_tags"></a> [secondary\_subnet\_tags](#input\_secondary\_subnet\_tags)                                                                    | Additional tags for the secondary subnets                                                                                                                                             | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
 | <a name="input_secondary_subnets"></a> [secondary\_subnets](#input\_secondary\_subnets)                                                                                  | The CIDR block for the secondary subnets.                                                                                                                                             | `list(string)`                                                                                                                                                                                            | `[]`                                       |    no    |
 | <a name="input_spoke_account_ids"></a> [spoke\_account\_ids](#input\_spoke\_account\_ids)                                                                                | Spoke account Ids, if mode is hub.                                                                                                                                                    | `list(string)`                                                                                                                                                                                            | `[]`                                       |    no    |
 | <a name="input_tags"></a> [tags](#input\_tags)                                                                                                                           | Tags to add more; default tags contian {terraform=true, environment=var.environment}                                                                                                  | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
-| <a name="input_vpc_tags"></a> [vpc\_tags](#input\_vpc\_tags)                                                                                                             | Additional tags for the VPC                                                                                                                                                           | `map(string)`                                                                                                                                                                                             | `{}`                                       |    no    |
 
 ## Outputs
 

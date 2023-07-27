@@ -142,8 +142,6 @@ resource "aws_subnet" "secondary" {
 resource "aws_eip" "nat" {
   count = var.is_create_vpc && var.is_create_nat_gateway ? local.nat_gateway_count : 0
 
-  vpc = true
-
   tags = merge(
     local.tags,
     { "Name" = local.nat_gateway_count > 1 ? format("%s-eip-nat-%s", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-eip-nat", local.name) }
