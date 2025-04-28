@@ -22,7 +22,7 @@ module "centralize_flow_log_bucket" {
     data.aws_iam_policy_document.force_ssl_s3_communication.json
   ]
 
-  kms_key_arn = { kms_arn = join("", module.flow_log_kms[*].key_arn) }
+  kms_key_arn = { kms_arn = local.is_create_flow_log_kms ? module.flow_log_kms[*].key_arn : var.kms_key_id }
 
   tags = var.tags
 }
