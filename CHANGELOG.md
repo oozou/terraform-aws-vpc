@@ -2,6 +2,12 @@
 
 All notable changes to this module will be documented in this file.
 
+## [v2.0.3] - 2025-05-28
+
+### Changed
+
+- Update flow log module KMS condition
+
 ## [v2.0.2] - 2023-07-27
 
 ### Added
