@@ -5,7 +5,7 @@ module "flow_log_kms" {
   source  = "oozou/kms-key/aws"
   version = "2.0.1"
 
-  count = var.kms_key_id == "" ? 1 - local.account_mode : 0
+  count = local.is_create_flow_log_kms ? 1 : 0
 
   key_type    = "service"
   description = "Used to encrypt data for account centralize vpc flow log"
