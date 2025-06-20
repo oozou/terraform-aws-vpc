@@ -37,3 +37,14 @@ output "centralize_flow_log_key_id" {
   description = "KMS Centralize Flow log key id"
   value       = join("", module.flow_log_kms[*].key_id)
 }
+
+
+output "flow_log_cloudwatch_log_group_name" {
+  description = "Flow log CloudWatch Log Group Name"
+  value       = try(aws_cloudwatch_log_group.flow_log[0].name, "")
+}
+
+output "flow_log_cloudwatch_log_group_arn" {
+  description = "Flow log CloudWatch Log Group ARN"
+  value       = try(aws_cloudwatch_log_group.flow_log[0].arn, "")
+}

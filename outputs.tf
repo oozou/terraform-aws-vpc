@@ -36,7 +36,7 @@ output "igw_id" {
 
 output "igw_arn" {
   description = "The ARN of the Internet Gateway"
-  value       = aws_internet_gateway.this[*].arn
+  value       = try(aws_internet_gateway.this[0].arn, "")
 }
 
 /* -------------------------------------------------------------------------- */
@@ -148,44 +148,53 @@ output "secondary_subnet_ipv6_cidr_blocks" {
 /* -------------------------------------------------------------------------- */
 output "flow_log_cloudwatch_dest_id" {
   description = "Flow log CloudWatch Id"
-  value       = join("", module.flow_log[*].flow_log_cloudwatch_dest_id)
+  value       = try(module.flow_log.flow_log_cloudwatch_dest_id, "")
 }
 
 output "flow_log_cloudwatch_dest_arn" {
   description = "Flow log CloudWatch ARN"
-  value       = join("", module.flow_log[*].flow_log_cloudwatch_dest_arn)
+  value       = try(module.flow_log.flow_log_cloudwatch_dest_arn, "")
 }
 
 output "flow_log_s3_dest_id" {
   description = "Flow log S3 Id"
-  value       = join("", module.flow_log[*].flow_log_s3_dest_id)
+  value       = try(module.flow_log.flow_log_s3_dest_id, "")
 }
 
 output "flow_log_s3_dest_arn" {
   description = "Flow log S3 ARN"
-  value       = join("", module.flow_log[*].flow_log_s3_dest_arn)
+  value       = try(module.flow_log.flow_log_s3_dest_arn, "")
 }
 
 output "centralize_flow_log_bucket_name" {
   description = "S3 Centralize Flow log Bucket Name"
-  value       = join("", module.flow_log[*].centralize_flow_log_bucket_name)
+  value       = try(module.flow_log.centralize_flow_log_bucket_name, "")
 }
 
 output "centralize_flow_log_bucket_arn" {
   description = "S3 Centralize Flow log Bucket ARN"
-  value       = join("", module.flow_log[*].centralize_flow_log_bucket_arn)
+  value       = try(module.flow_log.centralize_flow_log_bucket_arn, "")
 }
 
 output "centralize_flow_log_key_arn" {
   description = "KMS Centralize Flow log key arn"
-  value       = join("", module.flow_log[*].centralize_flow_log_key_arn)
+  value       = try(module.flow_log.centralize_flow_log_key_arn, "")
 }
 
 output "centralize_flow_log_key_id" {
   description = "KMS Centralize Flow log key id"
-  value       = join("", module.flow_log[*].centralize_flow_log_key_id)
+  value       = try(module.flow_log.centralize_flow_log_key_id, "")
 }
 
+output "flow_log_cloudwatch_log_group_name" {
+  description = "Flow log CloudWatch Log Group Name"
+  value       = try(module.flow_log.flow_log_cloudwatch_log_group_name, "")
+}
+
+output "flow_log_cloudwatch_log_group_arn" {
+  description = "Flow log CloudWatch Log Group ARN"
+  value       = try(module.flow_log.flow_log_cloudwatch_log_group_arn, "")
+}
 /* -------------------------------------------------------------------------- */
 /*                                 Route Table                                */
 /* -------------------------------------------------------------------------- */

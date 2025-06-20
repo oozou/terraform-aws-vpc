@@ -8,7 +8,7 @@ locals {
   policy_identifiers = [for account in local.account_ids : join("", ["arn:aws:iam::", account, ":root"])]
 
   centralize_flow_log_bucket_arn = var.centralize_flow_log_bucket_name == "" ? try(module.centralize_flow_log_bucket[0].bucket_arn, "") : join("", ["arn:aws:s3:::", var.centralize_flow_log_bucket_name])
-  
+
   is_create_flow_log_kms = var.kms_key_id == "" && local.account_mode == 0
 
   tags = merge(
