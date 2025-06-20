@@ -189,7 +189,7 @@ output "centralize_flow_log_key_id" {
 output "flow_log_cloudwatch_log_group_name" {
   description = "Flow log CloudWatch Log Group Name"
   value       = try(module.flow_log.flow_log_cloudwatch_log_group_name, "")
-} 
+}
 
 output "flow_log_cloudwatch_log_group_arn" {
   description = "Flow log CloudWatch Log Group ARN"
