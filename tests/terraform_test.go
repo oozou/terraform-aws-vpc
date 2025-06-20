@@ -13,6 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/aws/aws-sdk-go-v2/service/cloudwatchlogs"
 	"github.com/oozou/terraform-test-util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -67,7 +68,36 @@ func TestTerraformAWSVPCModule(t *testing.T) {
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer func() {
+		// Get log group name for cleanup if needed
+		logGroupName := terraform.Output(t, terraformOptions, "flow_log_cloudwatch_log_group_name")
+		if logGroupName != "" {
+			t.Logf("Flow log CloudWatch log group: %s", logGroupName)
+		}
+
 		terraform.Destroy(t, terraformOptions)
+
+		t.Logf("Log group %s", logGroupName)
+
+		ctx := context.TODO()
+
+		cfg, err := config.LoadDefaultConfig(ctx)
+		if err != nil {
+			t.Errorf("failed to load AWS config: %v", err)
+		}
+		client := cloudwatchlogs.NewFromConfig(cfg)
+
+		_, err = client.DeleteLogGroup(context.TODO(), &cloudwatchlogs.DeleteLogGroupInput{
+        LogGroupName: aws.String(logGroupName),
+		})
+
+		if err != nil {
+			t.Errorf("failed to delete log group: %v", err)
+		}
+
+		fmt.Printf("Log group %s deleted successfully.\n", logGroupName)
+
+
+		
 	}()
 
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors

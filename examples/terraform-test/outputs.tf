@@ -53,6 +53,16 @@ output "flow_log_cloudwatch_dest_id" {
   value       = module.vpc.flow_log_cloudwatch_dest_id
 }
 
+output "flow_log_cloudwatch_log_group_name" {
+  description = "Flow log CloudWatch Log Group Name"
+  value       = module.vpc.flow_log_cloudwatch_log_group_name
+}
+
+output "flow_log_cloudwatch_log_group_arn" {
+  description = "Flow log CloudWatch Log Group ARN"
+  value       = module.vpc.flow_log_cloudwatch_log_group_arn
+}
+
 output "flow_log_s3_dest_id" {
   description = "Flow log S3 Id"
   value       = module.vpc.flow_log_s3_dest_id
