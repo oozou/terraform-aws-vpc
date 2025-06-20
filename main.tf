@@ -134,6 +134,8 @@ resource "aws_subnet" "secondary" {
     var.is_enable_eks_auto_discovery ? local.eks_lb_controller_private_tag : {},
     { "Name" = length(var.secondary_subnets) > 1 ? format("%s-secondary-%s-subnet", local.name, element(local.availability_zone_shorten, count.index)) : format("%s-secondary-subnet", local.name) }
   )
+
+  depends_on = [ aws_vpc_ipv4_cidr_block_association.secondary_cidr ]
 }
 /* -------------------------------------------------------------------------- */
 /*                                     NAT                                    */
