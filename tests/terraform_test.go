@@ -264,16 +264,13 @@ func testNATGatewayCreated(t *testing.T, terraformOptions *terraform.Options, aw
 	cfg := createAWSConfig(t, awsRegion)
 	ec2Client := ec2.NewFromConfig(cfg)
 
-	// Collect Public NAT gateway IDs
-	allNatGatewayIDs := append(natGatewayIDs)
-
 	// Describe NAT gateways
 	describeNatGatewaysInput := &ec2.DescribeNatGatewaysInput{
-		NatGatewayIds: allNatGatewayIDs,
+		NatGatewayIds: natGatewayIDs,
 	}
 	natGatewaysResult, err := ec2Client.DescribeNatGateways(context.TODO(), describeNatGatewaysInput)
 	require.NoError(t, err, "Failed to describe NAT gateways")
-	require.Len(t, natGatewaysResult.NatGateways, len(allNatGatewayIDs), "All NAT gateways should exist")
+	require.Len(t, natGatewaysResult.NatGateways, len(natGatewayIDs), "All NAT gateways should exist")
 	t.Logf("NATGatewayresult: %+v", natGatewaysResult.NatGateways)
 	// Verify each NAT gateway is available
 	for _, natGateway := range natGatewaysResult.NatGateways {
