@@ -1,6 +1,11 @@
 # Change Log
 
 All notable changes to this module will be documented in this file.
+## [v2.0.4] - 2025-07-17
+
+### Changed
+
+- Update var type for centralize_flow_log_bucket_lifecycle_rule 
 
 ## [v2.0.3] - 2025-05-28
 
