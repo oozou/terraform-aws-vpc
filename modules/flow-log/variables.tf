@@ -79,15 +79,6 @@ variable "spoke_account_ids" {
 
 variable "centralize_flow_log_bucket_lifecycle_rule" {
   description = "List of lifecycle rules to transition the data. Leave empty to disable this feature. storage_class can be STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, GLACIER, or DEEP_ARCHIVE"
-  type = list(object({
-    id = string
-
-    transition = list(object({
-      days          = number
-      storage_class = string
-    }))
-
-    expiration_days = number
-  }))
-  default = []
+  type        = any
+  default     = []
 }
